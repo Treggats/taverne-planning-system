@@ -70,7 +70,7 @@ components:
   schemas:
     KalenderEntry:
       type: object
-      required: [token, action, kalender, datum, begin, eind, naam]
+      required: [token, action, kalender, datum, naam]
       properties:
         token:
           type: string
@@ -89,10 +89,12 @@ components:
           description: YYYY-MM-DD
         begin:
           type: string
-          description: HH:MM
+          description: >
+            HH:MM. Weglaten voor een heel-dag event. Als begin wel aanwezig
+            is maar eind niet, duurt het event 1 uur.
         eind:
           type: string
-          description: HH:MM
+          description: HH:MM. Optioneel — zie begin.
         naam:
           type: string
         organisatie:

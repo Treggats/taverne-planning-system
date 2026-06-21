@@ -5,6 +5,10 @@ Eén regel per wijziging, formaat: `- YYYY-MM-DD — wat er veranderd is (welk b
 Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
+## 2026-06-21 (branch feat/kalender-event-optionele-tijden)
+- `docs/apps-script-calendar.js`: `begin` en `eind` optioneel in `handleCreate`. Geen `begin` → heel-dag event; `begin` zonder `eind` → event van 1 uur.
+- `docs/openapi.yaml`: `begin` en `eind` uit `required` van `KalenderEntry`; beschrijving van de drie varianten toegevoegd.
+
 ## 2026-06-21
 - `docs/apps-script-calendar.js`: `handleMenu` toegevoegd (all-day event in Taverne, `menu:` in beschrijving). `getAllEvents` past nu `isAllDayEvent()` toe: all-day events krijgen `geheel_dag: true` zonder `begin`/`eind`; sort gecorrigeerd voor `undefined` begin.
 - `docs/openapi.yaml`: `MenuEntry` schema toegevoegd; `menu` opgenomen in `oneOf` en discriminator mapping.
