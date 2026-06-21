@@ -8,10 +8,9 @@
     "src/utils-date",
     "src/utils-http",
     "src/utils-sheet",
-    "src/calendar-read",
-    "src/calendar-write",
-    "src/bezorgservice-read",
-    "src/bezorgservice-write",
+    "src/calendar",
+    "src/menu",
+    "src/bezorgservice",
     "src/main"
   ]
 }
