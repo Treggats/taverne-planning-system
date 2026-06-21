@@ -1,9 +1,8 @@
-function openBezorgserviceSheet() {
-  return SpreadsheetApp.openById(BEZORGSERVICE_SHEET_ID);
+function openDeliverySheet() {
+  return SpreadsheetApp.openById(DELIVERY_SHEET_ID);
 }
 
-
-function volgendKlantId(sheet, headers) {
+function nextClientId(sheet, headers) {
   const idCol = headers.indexOf('klant_id');
   if (idCol === -1) return 100;
   const lastRow = sheet.getLastRow();
@@ -13,43 +12,43 @@ function volgendKlantId(sheet, headers) {
   return real.length ? Math.max.apply(null, real) + 1 : 100;
 }
 
-function handleBezorgingen(datumString) {
-  if (! datumString) {
+function handleDeliveries(dateString) {
+  if (! dateString) {
     return response({ error: 'Missing datum parameter (YYYY-MM-DD)' });
   }
 
-  const datum = parseDate(datumString);
-  const weekdag = WEEKDAGEN[datum.getDay()];
+  const date = parseDate(dateString);
+  const weekday = WEEKDAYS[date.getDay()];
 
-  const klanten = readRows(openBezorgserviceSheet(), 'Klanten');
-  const afwijkingen = readRows(openBezorgserviceSheet(), 'Afwijkingen');
+  const clients = readRows(openDeliverySheet(), 'Klanten');
+  const exceptions = readRows(openDeliverySheet(), 'Afwijkingen');
 
-  const relevant = afwijkingen.filter(a => afwijkingGeldtVoor(a, datum, weekdag));
+  const relevant = exceptions.filter(a => exceptionAppliesOn(a, date, weekday));
 
-  const annuleringen = new Set(
+  const cancellations = new Set(
     relevant.filter(a => a.type === 'annulering').map(a => String(a.klant_id))
   );
 
-  const wijzigingen = {};
+  const modifications = {};
   for (const a of relevant.filter(a => a.type === 'wijziging')) {
-    wijzigingen[String(a.klant_id)] = a;
+    modifications[String(a.klant_id)] = a;
   }
 
-  const klantenById = {};
-  for (const k of klanten) {
-    klantenById[String(k.klant_id)] = k;
+  const clientsById = {};
+  for (const c of clients) {
+    clientsById[String(c.klant_id)] = c;
   }
 
-  const entries = klanten
-    .filter(k => String(k.actief).toLowerCase() === 'ja')
-    .filter(k => roosterBevat(k.rooster, weekdag))
-    .filter(k => ! annuleringen.has(String(k.klant_id)))
-    .map(k => buildBezorgEntry(k, wijzigingen[String(k.klant_id)]));
+  const entries = clients
+    .filter(c => String(c.actief).toLowerCase() === 'ja')
+    .filter(c => scheduleIncludes(c.rooster, weekday))
+    .filter(c => ! cancellations.has(String(c.klant_id)))
+    .map(c => buildDeliveryEntry(c, modifications[String(c.klant_id)]));
 
   for (const ex of relevant.filter(a => a.type === 'extra')) {
-    const klant = klantenById[String(ex.klant_id)];
-    if (! klant) continue;
-    entries.push(buildBezorgEntry(klant, ex));
+    const client = clientsById[String(ex.klant_id)];
+    if (! client) continue;
+    entries.push(buildDeliveryEntry(client, ex));
   }
 
   entries.sort((a, b) =>
@@ -57,13 +56,13 @@ function handleBezorgingen(datumString) {
   );
 
   return response({
-    datum: datumString,
-    weekdag,
+    datum: dateString,
+    weekdag: weekday,
     entries,
   });
 }
 
-function handleAfwijking(body) {
+function handleException(body) {
   if (! body.klant_id) {
     return response({ error: 'Missing field: klant_id' });
   }
@@ -72,23 +71,23 @@ function handleAfwijking(body) {
     return response({ error: 'Missing field: type' });
   }
 
-  if (AFWIJKING_TYPES.indexOf(body.type) === -1) {
-    return response({ error: `type moet ${AFWIJKING_TYPES.join(', ')} zijn` });
+  if (EXCEPTION_TYPES.indexOf(body.type) === -1) {
+    return response({ error: `type moet ${EXCEPTION_TYPES.join(', ')} zijn` });
   }
 
   if (! body.datum && ! body.weekdag) {
     return response({ error: 'datum of weekdag verplicht' });
   }
 
-  if (body.weekdag && WEEKDAGEN.indexOf(body.weekdag) === -1) {
+  if (body.weekdag && WEEKDAYS.indexOf(body.weekdag) === -1) {
     return response({ error: 'weekdag moet ma/di/wo/do/vr/za/zo zijn' });
   }
 
-  if (body.bezorgwijze && BEZORGWIJZEN.indexOf(body.bezorgwijze) === -1) {
-    return response({ error: `bezorgwijze moet ${BEZORGWIJZEN.join(', ')} zijn` });
+  if (body.bezorgwijze && DELIVERY_METHODS.indexOf(body.bezorgwijze) === -1) {
+    return response({ error: `bezorgwijze moet ${DELIVERY_METHODS.join(', ')} zijn` });
   }
 
-  const sheet = openBezorgserviceSheet().getSheetByName('Afwijkingen');
+  const sheet = openDeliverySheet().getSheetByName('Afwijkingen');
   const headers = readHeaders(sheet);
   const row = headers.map(h => body[h] ?? '');
   sheet.appendRow(row);
@@ -96,7 +95,7 @@ function handleAfwijking(body) {
   return response({ success: true });
 }
 
-function handleKlant(body) {
+function handleClient(body) {
   if (! body.voornaam) {
     return response({ error: 'Missing field: voornaam' });
   }
@@ -109,21 +108,21 @@ function handleKlant(body) {
     return response({ error: 'Missing field: vaste_bezorgtijd' });
   }
 
-  if (! body.bezorgwijze || BEZORGWIJZEN.indexOf(body.bezorgwijze) === -1) {
-    return response({ error: `bezorgwijze moet ${BEZORGWIJZEN.join(', ')} zijn` });
+  if (! body.bezorgwijze || DELIVERY_METHODS.indexOf(body.bezorgwijze) === -1) {
+    return response({ error: `bezorgwijze moet ${DELIVERY_METHODS.join(', ')} zijn` });
   }
 
-  for (const dag of String(body.rooster).split(',').map(s => s.trim())) {
-    if (WEEKDAGEN.indexOf(dag) === -1) {
-      return response({ error: `rooster bevat ongeldige weekdag: ${dag}` });
+  for (const day of String(body.rooster).split(',').map(s => s.trim())) {
+    if (WEEKDAYS.indexOf(day) === -1) {
+      return response({ error: `rooster bevat ongeldige weekdag: ${day}` });
     }
   }
 
-  const sheet = openBezorgserviceSheet().getSheetByName('Klanten');
+  const sheet = openDeliverySheet().getSheetByName('Klanten');
   const headers = readHeaders(sheet);
 
   if (! body.klant_id) {
-    body.klant_id = volgendKlantId(sheet, headers);
+    body.klant_id = nextClientId(sheet, headers);
   }
 
   if (body.porties === undefined || body.porties === '') body.porties = 1;
@@ -136,40 +135,40 @@ function handleKlant(body) {
   return response({ success: true, klant_id: body.klant_id });
 }
 
-function afwijkingGeldtVoor(afwijking, datum, weekdag) {
-  if (afwijking.datum) {
-    const d = toDate(afwijking.datum);
-    return d.getFullYear() === datum.getFullYear() &&
-           d.getMonth() === datum.getMonth() &&
-           d.getDate() === datum.getDate();
+function exceptionAppliesOn(exception, date, weekday) {
+  if (exception.datum) {
+    const d = toDate(exception.datum);
+    return d.getFullYear() === date.getFullYear() &&
+           d.getMonth() === date.getMonth() &&
+           d.getDate() === date.getDate();
   }
-  if (afwijking.weekdag) {
-    return String(afwijking.weekdag).trim() === weekdag;
+  if (exception.weekdag) {
+    return String(exception.weekdag).trim() === weekday;
   }
   return false;
 }
 
-function roosterBevat(rooster, weekdag) {
-  if (! rooster) return false;
-  return String(rooster).split(',').map(s => s.trim()).indexOf(weekdag) !== -1;
+function scheduleIncludes(schedule, weekday) {
+  if (! schedule) return false;
+  return String(schedule).split(',').map(s => s.trim()).indexOf(weekday) !== -1;
 }
 
-function buildBezorgEntry(klant, afwijking) {
-  const a = afwijking || {};
-  const toetje = (firstSet(a.toetje, klant.vast_toetje) === 'ja') ? 'ja' : 'nee';
+function buildDeliveryEntry(client, exception) {
+  const ex = exception || {};
+  const dessert = (firstSet(ex.toetje, client.vast_toetje) === 'ja') ? 'ja' : 'nee';
   return {
-    klant_id: klant.klant_id,
-    naam: `${klant.voornaam ?? ''} ${klant.achternaam ?? ''}`.trim(),
-    adres: klant.adres ?? '',
-    telefoon: klant.telefoon ?? '',
-    tijd: asTimeString(firstSet(a.tijd, klant.vaste_bezorgtijd)),
-    porties: firstSet(a.porties, klant.porties),
-    toetje,
-    bezorgwijze: firstSet(a.bezorgwijze, klant.bezorgwijze),
-    bezorger: a.bezorger ?? '',
-    opmerkingen: klant.bezorg_opmerkingen ?? '',
-    dieetwensen: klant.dieetwensen ?? '',
-    notitie: a.notitie ?? '',
+    klant_id: client.klant_id,
+    naam: `${client.voornaam ?? ''} ${client.achternaam ?? ''}`.trim(),
+    adres: client.adres ?? '',
+    telefoon: client.telefoon ?? '',
+    tijd: asTimeString(firstSet(ex.tijd, client.vaste_bezorgtijd)),
+    porties: firstSet(ex.porties, client.porties),
+    toetje: dessert,
+    bezorgwijze: firstSet(ex.bezorgwijze, client.bezorgwijze),
+    bezorger: ex.bezorger ?? '',
+    opmerkingen: client.bezorg_opmerkingen ?? '',
+    dieetwensen: client.dieetwensen ?? '',
+    notitie: ex.notitie ?? '',
   };
 }
 

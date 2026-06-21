@@ -14,11 +14,11 @@ function doGet(e) {
   }
 
   if (action === 'bezorgingen') {
-    return handleBezorgingen(e.parameter.datum);
+    return handleDeliveries(e.parameter.datum);
   }
 
   if (action === 'werkrooster') {
-    return handleWerkrooster(e.parameter.week, e.parameter.datum);
+    return handleSchedule(e.parameter.week, e.parameter.datum);
   }
 
   return response({ error: 'Unknown action' });
@@ -34,11 +34,11 @@ function doPost(e) {
   const action = body.action;
 
   if (action === 'afwijking') {
-    return handleAfwijking(body);
+    return handleException(body);
   }
 
   if (action === 'klant') {
-    return handleKlant(body);
+    return handleClient(body);
   }
 
   if (action === 'menu') {
@@ -46,15 +46,15 @@ function doPost(e) {
   }
 
   if (action === 'dienst') {
-    return handleDienst(body);
+    return handleShift(body);
   }
 
   if (action === 'week_kopieer') {
-    return handleWeekKopieer(body);
+    return handleWeekCopy(body);
   }
 
   if (action === 'medewerker') {
-    return handleMedewerker(body);
+    return handleEmployee(body);
   }
 
   return handleCreate(body);
