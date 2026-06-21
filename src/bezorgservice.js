@@ -2,14 +2,6 @@ function openBezorgserviceSheet() {
   return SpreadsheetApp.openById(BEZORGSERVICE_SHEET_ID);
 }
 
-function readSheetRows(sheetName) {
-  const sheet = openBezorgserviceSheet().getSheetByName(sheetName);
-  if (! sheet) throw new Error(`Sheet '${sheetName}' niet gevonden`);
-  const values = sheet.getDataRange().getValues();
-  if (values.length < 2) return [];
-  const headers = values.shift();
-  return values.map(row => zipRow(headers, row));
-}
 
 function volgendKlantId(sheet, headers) {
   const idCol = headers.indexOf('klant_id');
@@ -29,8 +21,8 @@ function handleBezorgingen(datumString) {
   const datum = parseDate(datumString);
   const weekdag = WEEKDAGEN[datum.getDay()];
 
-  const klanten = readSheetRows('Klanten');
-  const afwijkingen = readSheetRows('Afwijkingen');
+  const klanten = readRows(openBezorgserviceSheet(), 'Klanten');
+  const afwijkingen = readRows(openBezorgserviceSheet(), 'Afwijkingen');
 
   const relevant = afwijkingen.filter(a => afwijkingGeldtVoor(a, datum, weekdag));
 
