@@ -1,0 +1,17 @@
+{
+  "timeZone": "Europe/Amsterdam",
+  "dependencies": {},
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "filePushOrder": [
+    "src/config",
+    "src/utils-date",
+    "src/utils-http",
+    "src/utils-sheet",
+    "src/calendar-read",
+    "src/calendar-write",
+    "src/bezorgservice-read",
+    "src/bezorgservice-write",
+    "src/main"
+  ]
+}
