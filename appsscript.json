@@ -11,6 +11,7 @@
     "src/calendar",
     "src/menu",
     "src/bezorgservice",
+    "src/werkrooster",
     "src/main"
   ]
 }

@@ -21,11 +21,12 @@ paths:
           required: true
           schema:
             type: string
-            enum: [today, week, bezorgingen]
+            enum: [today, week, bezorgingen, werkrooster]
             description: >
               today = vandaag's kalender entries,
               week = kalender week (verplicht: date),
-              bezorgingen = bezorglijst voor één dag (verplicht: datum).
+              bezorgingen = bezorglijst voor één dag (verplicht: datum),
+              werkrooster = personeelsrooster voor één week (week of datum).
         - name: date
           in: query
           required: false
@@ -35,7 +36,18 @@ paths:
         - name: datum
           in: query
           required: false
-          description: Datum in YYYY-MM-DD, verplicht bij action=bezorgingen
+          description: >
+            Datum in YYYY-MM-DD. Verplicht bij action=bezorgingen. Bij
+            action=werkrooster mag dit i.p.v. week — server bepaalt de
+            ISO-week.
+          schema:
+            type: string
+        - name: week
+          in: query
+          required: false
+          description: >
+            ISO-weeklabel YYYY-WW (bijv. 2026-14) voor action=werkrooster.
+            Gebruik dit of datum.
           schema:
             type: string
       responses:
@@ -56,6 +68,9 @@ paths:
                 - $ref: '#/components/schemas/Afwijking'
                 - $ref: '#/components/schemas/Klant'
                 - $ref: '#/components/schemas/MenuEntry'
+                - $ref: '#/components/schemas/Dienst'
+                - $ref: '#/components/schemas/WeekKopieer'
+                - $ref: '#/components/schemas/Medewerker'
               discriminator:
                 propertyName: action
                 mapping:
@@ -63,6 +78,9 @@ paths:
                   afwijking: '#/components/schemas/Afwijking'
                   klant: '#/components/schemas/Klant'
                   menu: '#/components/schemas/MenuEntry'
+                  dienst: '#/components/schemas/Dienst'
+                  week_kopieer: '#/components/schemas/WeekKopieer'
+                  medewerker: '#/components/schemas/Medewerker'
       responses:
         '200':
           description: Bewerking gelukt
@@ -222,3 +240,83 @@ components:
             Vrije tekst beschrijving van het menu, bv. "aardappel, broccoli,
             sukade langzaam gegaard" of "stamppot boerenkool" of
             "kabeljauw, salade".
+    Dienst:
+      type: object
+      required: [token, action, weekdag, naam]
+      description: >
+        Eén werkdienst van één persoon op één weekdag in een week. Upsert:
+        bestaat de dienst al (zelfde week + weekdag + naam) dan wordt hij
+        overschreven. Begin leeg laten verwijdert de dienst.
+      properties:
+        token:
+          type: string
+        action:
+          type: string
+          enum: [dienst]
+        week:
+          type: string
+          description: ISO-weeklabel YYYY-WW (bijv. 2026-14). Gebruik week of datum.
+        datum:
+          type: string
+          description: >
+            YYYY-MM-DD, een dag in de doelweek. Server bepaalt de ISO-week.
+            Gebruik dit i.p.v. week zodat het systeem het weeknummer rekent.
+        weekdag:
+          type: string
+          enum: [ma, di, wo, do, vr, za, zo]
+        naam:
+          type: string
+          description: Naam van de medewerker (zoals in tab Medewerkers).
+        begin:
+          type: string
+          description: HH:MM. Leeg laten verwijdert de dienst.
+        eind:
+          type: string
+          description: HH:MM. Optioneel.
+        notitie:
+          type: string
+          description: Bijv. "vanzelf", "slaapdienst".
+    WeekKopieer:
+      type: object
+      required: [token, action]
+      description: >
+        Kopieert alle diensten van een bronweek naar een lege doelweek
+        ("kopieer vorige week als startpunt"). De doelweek moet leeg zijn.
+      properties:
+        token:
+          type: string
+        action:
+          type: string
+          enum: [week_kopieer]
+        van:
+          type: string
+          description: Bronweek ISO-label YYYY-WW. Gebruik van of van_datum.
+        van_datum:
+          type: string
+          description: YYYY-MM-DD in de bronweek.
+        naar:
+          type: string
+          description: Doelweek ISO-label YYYY-WW. Gebruik naar of naar_datum.
+        naar_datum:
+          type: string
+          description: YYYY-MM-DD in de doelweek.
+    Medewerker:
+      type: object
+      required: [token, action, naam]
+      description: Voegt een medewerker toe of werkt deze bij (op naam).
+      properties:
+        token:
+          type: string
+        action:
+          type: string
+          enum: [medewerker]
+        naam:
+          type: string
+        type:
+          type: string
+          enum: [vast, stagiair, vrijwilliger]
+          description: Default vast.
+        actief:
+          type: string
+          enum: [ja, nee]
+          description: Default ja.

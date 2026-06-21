@@ -6,6 +6,38 @@ Format per beslissing: korte titel, datum, **Waarom**, eventueel **Alternatief o
 
 ---
 
+## Werkrooster: snapshot per week, niet rooster + afwijkingen
+_Vastgelegd: 2026-06-21_
+
+Het werkrooster krijgt een eigen sheet (`Werkrooster`) met een tab
+`Medewerkers` (namenlijst) en `Diensten` (één rij per persoon per werkdag per
+week, gesleuteld op ISO-weeklabel `YYYY-WW`). Elke week wordt vers opgebouwd;
+`week_kopieer` kopieert een vorige week als startpunt.
+
+**Waarom:** Analyse van de weekplanningen liet zien dat werktijden wekelijks
+schuiven — zelfs Antje zelf (wk 1–2 start 08:00/08:30, wk 3–5 09:00, wk 6–9
+weer 08:00). Een vast basisrooster zou dus elke week grotendeels worden
+overschreven; dan voegt het "vaste" deel niets toe en wordt het juist
+verwarrend. Een snapshot per week sluit aan bij hoe Antje het nu elk weekend
+opnieuw opbouwt.
+
+**Alternatief overwogen:** Vast rooster + afwijkingen zoals de bezorgservice.
+Verworpen omdat staffing veel volatieler is dan de (stabiele) klantenroosters;
+de afwijkingen zouden de regel worden i.p.v. de uitzondering.
+
+**Bewust uitgesteld:** De wekelijkse print/export voor in de keuken. Eerst
+beheer bouwen en valideren; export als aparte vervolgstap.
+
+## Werkrooster mag wél bewerkt/verwijderd worden via de GPT
+_Vastgelegd: 2026-06-21_
+
+De regel "bestaande items nooit aanpassen/verwijderen" geldt voor calendar
+events en de originele weekplanningen. De `Werkrooster`-sheet is onze eigen
+beheerde opslag; `dienst` doet upsert en delete, `week_kopieer` schrijft rijen.
+
+**Waarom:** "Volledig beheren" is hier expliciet de wens van Antje. Er is geen
+externe bron van waarheid die beschermd moet worden — de sheet ís de bron.
+
 ## Bezorgservice: rooster-gedreven met afwijkingen-tab
 _Vastgelegd: 2026-06-19_
 

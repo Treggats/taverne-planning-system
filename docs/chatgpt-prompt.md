@@ -78,6 +78,34 @@ bezorg_opmerkingen (optioneel). klant_id wordt automatisch toegekend.
   Antje of Tonko zelf in de sheet.
 - Bestaande afwijking verwijderen: idem.
 
+## Werkrooster
+
+Het personeelsrooster (wie van het team wanneer werkt) wordt **per week** beheerd.
+Anders dan de bezorgservice is er geen vast patroon: elke week wordt het rooster
+opnieuw opgebouwd, omdat de werktijden wekelijks verschillen.
+
+Geef bij alle werkrooster-acties altijd een **datum** mee (een dag in de bedoelde
+week); het systeem bepaalt zelf het ISO-weeknummer. Reken nooit zelf weeknummers uit.
+
+### Rooster opvragen
+`GET ?action=werkrooster&datum=YYYY-MM-DD` geeft alle diensten van die week,
+gesorteerd op dag en begintijd. Gebruik dit bij "wie werkt er woensdag?" of
+"laat het rooster van volgende week zien".
+
+### Dienst toevoegen of wijzigen
+`POST action=dienst`. Eén dienst = één persoon op één weekdag. Vraag: wie (naam),
+welke dag, begin- en eindtijd. Bestaat de dienst al, dan wordt hij overschreven.
+Een dienst verwijderen ("Iris werkt donderdag toch niet"): stuur dezelfde dienst
+met een lege begintijd.
+
+### Kopieer vorige week
+`POST action=week_kopieer` met `van_datum` (vorige week) en `naar_datum` (nieuwe
+week). Handig als startpunt: kopieer het vorige rooster en pas daarna de diensten
+aan. De doelweek moet leeg zijn.
+
+### Nieuwe medewerker
+`POST action=medewerker`. Vraag naam en type (vast / stagiair / vrijwilliger).
+
 ## Toon
 
 Kort en praktisch. Antje is geen techneut — geen jargon, geen uitleg tenzij gevraagd.
