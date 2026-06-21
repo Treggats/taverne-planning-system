@@ -1,14 +1,14 @@
-function openWerkroosterSheet() {
-  return SpreadsheetApp.openById(WERKROOSTER_SHEET_ID);
+function openScheduleSheet() {
+  return SpreadsheetApp.openById(SCHEDULE_SHEET_ID);
 }
 
-function handleWerkrooster(week, datumString) {
-  const weekLabel = normalizeWeek(week, datumString);
+function handleSchedule(week, dateString) {
+  const weekLabel = normalizeWeek(week, dateString);
   if (! weekLabel) {
     return response({ error: 'week (YYYY-WW) of datum (YYYY-MM-DD) verplicht' });
   }
 
-  const diensten = readRows(openWerkroosterSheet(), 'Diensten')
+  const shifts = readRows(openScheduleSheet(), 'Diensten')
     .filter(d => String(d.week).trim() === weekLabel)
     .map(d => ({
       week: weekLabel,
@@ -19,22 +19,22 @@ function handleWerkrooster(week, datumString) {
       notitie: d.notitie ?? '',
     }));
 
-  diensten.sort((a, b) =>
-    WEEKDAGEN.indexOf(a.weekdag) - WEEKDAGEN.indexOf(b.weekdag) ||
+  shifts.sort((a, b) =>
+    WEEKDAYS.indexOf(a.weekdag) - WEEKDAYS.indexOf(b.weekdag) ||
     a.begin.localeCompare(b.begin) ||
     a.naam.localeCompare(b.naam)
   );
 
-  return response({ week: weekLabel, diensten });
+  return response({ week: weekLabel, diensten: shifts });
 }
 
-function handleDienst(body) {
+function handleShift(body) {
   const weekLabel = normalizeWeek(body.week, body.datum);
   if (! weekLabel) {
     return response({ error: 'week (YYYY-WW) of datum (YYYY-MM-DD) verplicht' });
   }
 
-  if (! body.weekdag || WEEKDAGEN.indexOf(body.weekdag) === -1) {
+  if (! body.weekdag || WEEKDAYS.indexOf(body.weekdag) === -1) {
     return response({ error: 'weekdag moet ma/di/wo/do/vr/za/zo zijn' });
   }
 
@@ -42,16 +42,16 @@ function handleDienst(body) {
     return response({ error: 'Missing field: naam' });
   }
 
-  const sheet = openWerkroosterSheet().getSheetByName('Diensten');
+  const sheet = openScheduleSheet().getSheetByName('Diensten');
   const headers = readHeaders(sheet);
-  const rowIndex = vindDienstRij(sheet, headers, weekLabel, body.weekdag, body.naam);
+  const rowIndex = findShiftRow(sheet, headers, weekLabel, body.weekdag, body.naam);
 
   if (! body.begin) {
     if (rowIndex !== -1) {
       sheet.deleteRow(rowIndex);
-      return response({ success: true, verwijderd: true });
+      return response({ success: true, deleted: true });
     }
-    return response({ success: true, verwijderd: false });
+    return response({ success: true, deleted: false });
   }
 
   const record = {
@@ -66,65 +66,65 @@ function handleDienst(body) {
 
   if (rowIndex !== -1) {
     sheet.getRange(rowIndex, 1, 1, headers.length).setValues([row]);
-    return response({ success: true, gewijzigd: true });
+    return response({ success: true, updated: true });
   }
 
   sheet.appendRow(row);
-  return response({ success: true, toegevoegd: true });
+  return response({ success: true, added: true });
 }
 
-function handleWeekKopieer(body) {
-  const van = normalizeWeek(body.van, body.van_datum);
-  const naar = normalizeWeek(body.naar, body.naar_datum);
+function handleWeekCopy(body) {
+  const from = normalizeWeek(body.van, body.van_datum);
+  const to = normalizeWeek(body.naar, body.naar_datum);
 
-  if (! van || ! naar) {
+  if (! from || ! to) {
     return response({ error: 'van en naar zijn verplicht (YYYY-WW of *_datum YYYY-MM-DD)' });
   }
 
-  if (van === naar) {
+  if (from === to) {
     return response({ error: 'van en naar mogen niet dezelfde week zijn' });
   }
 
-  const sheet = openWerkroosterSheet().getSheetByName('Diensten');
+  const sheet = openScheduleSheet().getSheetByName('Diensten');
   const headers = readHeaders(sheet);
 
-  const bron = readRows(openWerkroosterSheet(), 'Diensten')
-    .filter(d => String(d.week).trim() === van);
+  const source = readRows(openScheduleSheet(), 'Diensten')
+    .filter(d => String(d.week).trim() === from);
 
-  if (bron.length === 0) {
-    return response({ error: `Geen diensten gevonden voor week ${van}` });
+  if (source.length === 0) {
+    return response({ error: `Geen diensten gevonden voor week ${from}` });
   }
 
-  const bestaat = readRows(openWerkroosterSheet(), 'Diensten')
-    .some(d => String(d.week).trim() === naar);
+  const exists = readRows(openScheduleSheet(), 'Diensten')
+    .some(d => String(d.week).trim() === to);
 
-  if (bestaat) {
-    return response({ error: `Week ${naar} bevat al diensten; eerst leegmaken` });
+  if (exists) {
+    return response({ error: `Week ${to} bevat al diensten; eerst leegmaken` });
   }
 
-  const rows = bron.map(d => headers.map(h => {
-    if (h === 'week') return naar;
+  const rows = source.map(d => headers.map(h => {
+    if (h === 'week') return to;
     const v = d[h];
     return (h === 'begin' || h === 'eind') ? asTimeString(v) : (v ?? '');
   }));
 
   sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, headers.length).setValues(rows);
 
-  return response({ success: true, gekopieerd: rows.length, van, naar });
+  return response({ success: true, copied: rows.length, van: from, naar: to });
 }
 
-function handleMedewerker(body) {
+function handleEmployee(body) {
   if (! body.naam) {
     return response({ error: 'Missing field: naam' });
   }
 
-  if (body.type && MEDEWERKER_TYPES.indexOf(body.type) === -1) {
-    return response({ error: `type moet ${MEDEWERKER_TYPES.join(', ')} zijn` });
+  if (body.type && EMPLOYEE_TYPES.indexOf(body.type) === -1) {
+    return response({ error: `type moet ${EMPLOYEE_TYPES.join(', ')} zijn` });
   }
 
-  const sheet = openWerkroosterSheet().getSheetByName('Medewerkers');
+  const sheet = openScheduleSheet().getSheetByName('Medewerkers');
   const headers = readHeaders(sheet);
-  const rowIndex = vindMedewerkerRij(sheet, headers, body.naam);
+  const rowIndex = findEmployeeRow(sheet, headers, body.naam);
 
   const record = {
     naam: body.naam,
@@ -135,45 +135,45 @@ function handleMedewerker(body) {
 
   if (rowIndex !== -1) {
     sheet.getRange(rowIndex, 1, 1, headers.length).setValues([row]);
-    return response({ success: true, gewijzigd: true });
+    return response({ success: true, updated: true });
   }
 
   sheet.appendRow(row);
-  return response({ success: true, toegevoegd: true });
+  return response({ success: true, added: true });
 }
 
-function vindDienstRij(sheet, headers, week, weekdag, naam) {
+function findShiftRow(sheet, headers, week, weekday, name) {
   const values = sheet.getDataRange().getValues();
   const w = headers.indexOf('week');
   const d = headers.indexOf('weekdag');
   const n = headers.indexOf('naam');
   for (let i = 1; i < values.length; i++) {
     if (String(values[i][w]).trim() === week &&
-        String(values[i][d]).trim() === weekdag &&
-        String(values[i][n]).trim() === String(naam).trim()) {
+        String(values[i][d]).trim() === weekday &&
+        String(values[i][n]).trim() === String(name).trim()) {
       return i + 1;
     }
   }
   return -1;
 }
 
-function vindMedewerkerRij(sheet, headers, naam) {
+function findEmployeeRow(sheet, headers, name) {
   const values = sheet.getDataRange().getValues();
   const n = headers.indexOf('naam');
   for (let i = 1; i < values.length; i++) {
-    if (String(values[i][n]).trim() === String(naam).trim()) {
+    if (String(values[i][n]).trim() === String(name).trim()) {
       return i + 1;
     }
   }
   return -1;
 }
 
-function normalizeWeek(week, datumString) {
+function normalizeWeek(week, dateString) {
   if (week) {
     return String(week).trim();
   }
-  if (datumString) {
-    return isoWeekLabel(parseDate(datumString));
+  if (dateString) {
+    return isoWeekLabel(parseDate(dateString));
   }
   return '';
 }
