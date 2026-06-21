@@ -1,0 +1,222 @@
+openapi: 3.1.0
+info:
+  title: Antje's Taverne Planning API
+  version: 3.0.0
+servers:
+  - url: JOUW_WEB_APP_URL
+paths:
+  /:
+    get:
+      operationId: getPlanning
+      summary: Haal planning of bezorglijst op
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+            default: JOUW_TOKEN
+        - name: action
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [today, week, bezorgingen]
+            description: >
+              today = vandaag's kalender entries,
+              week = kalender week (verplicht: date),
+              bezorgingen = bezorglijst voor één dag (verplicht: datum).
+        - name: date
+          in: query
+          required: false
+          description: Datum in YYYY-MM-DD, verplicht bij action=week
+          schema:
+            type: string
+        - name: datum
+          in: query
+          required: false
+          description: Datum in YYYY-MM-DD, verplicht bij action=bezorgingen
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Planning entries of bezorglijst (zie action)
+    post:
+      operationId: postAction
+      summary: >
+        Voeg kalender entry, bezorgservice afwijking of nieuwe bezorgservice
+        klant toe. action veld bepaalt welke.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/KalenderEntry'
+                - $ref: '#/components/schemas/Afwijking'
+                - $ref: '#/components/schemas/Klant'
+                - $ref: '#/components/schemas/MenuEntry'
+              discriminator:
+                propertyName: action
+                mapping:
+                  kalender_event: '#/components/schemas/KalenderEntry'
+                  afwijking: '#/components/schemas/Afwijking'
+                  klant: '#/components/schemas/Klant'
+                  menu: '#/components/schemas/MenuEntry'
+      responses:
+        '200':
+          description: Bewerking gelukt
+components:
+  schemas:
+    KalenderEntry:
+      type: object
+      required: [token, action, kalender, datum, begin, eind, naam]
+      properties:
+        token:
+          type: string
+        action:
+          type: string
+          enum: [kalender_event]
+        kalender:
+          type: string
+          enum: [taverne, mspa, jules]
+          description: >
+            taverne = commercieel (Cosis, KOSKAMP, Beweegtuin, etc.),
+            mspa = sociaal (sjoelen, rummicub, circus, ExpresZo),
+            jules = koffie/ontmoeting (COC, Regenboog Café, Zonder Stempel)
+        datum:
+          type: string
+          description: YYYY-MM-DD
+        begin:
+          type: string
+          description: HH:MM
+        eind:
+          type: string
+          description: HH:MM
+        naam:
+          type: string
+        organisatie:
+          type: string
+        locatie:
+          type: string
+          description: >
+            Taverne-ruimtes: 400m, TT, Renners, Dug Out, Ballo.
+            MSPA/Jules: Jules Huiskamer.
+        aantal:
+          type: integer
+        lunch:
+          type: string
+          description: >
+            ja (standaard = A+B+fruit), nee, of specifieke omschrijving
+            bij afwijking (bijv. vegetarisch, A+fruit).
+        notities:
+          type: string
+    Afwijking:
+      type: object
+      required: [token, action, klant_id, type]
+      properties:
+        token:
+          type: string
+        action:
+          type: string
+          enum: [afwijking]
+        klant_id:
+          type: integer
+          description: ID van de bestaande klant.
+        type:
+          type: string
+          enum: [annulering, wijziging, extra]
+          description: >
+            annulering = klant krijgt deze keer niets,
+            wijziging = klant krijgt iets anders (tijd/porties/toetje/bezorger/bezorgwijze),
+            extra = klant krijgt een extra bezorging buiten rooster.
+        datum:
+          type: string
+          description: YYYY-MM-DD voor eenmalige afwijking. Eén van datum/weekdag is verplicht.
+        weekdag:
+          type: string
+          enum: [ma, di, wo, do, vr, za, zo]
+          description: Voor terugkerende weekdag-afwijking.
+        porties:
+          type: integer
+          description: Overschrijft klant.porties (alleen bij wijziging of extra).
+        toetje:
+          type: string
+          enum: [ja, nee]
+          description: Overschrijft klant.vast_toetje.
+        tijd:
+          type: string
+          description: HH:MM, overschrijft klant.vaste_bezorgtijd.
+        bezorgwijze:
+          type: string
+          enum: [bezorgen, ophalen, ter_plaatse]
+          description: Overschrijft klant.bezorgwijze.
+        bezorger:
+          type: string
+          description: Wie er bezorgt op deze dag.
+        notitie:
+          type: string
+    Klant:
+      type: object
+      required: [token, action, voornaam, rooster, vaste_bezorgtijd, bezorgwijze]
+      properties:
+        token:
+          type: string
+        action:
+          type: string
+          enum: [klant]
+        klant_id:
+          type: integer
+          description: Optioneel, wordt automatisch toegekend als leeg.
+        voornaam:
+          type: string
+        achternaam:
+          type: string
+        adres:
+          type: string
+        telefoon:
+          type: string
+        rooster:
+          type: string
+          description: >
+            Comma-separated weekdagen waarop de klant bestelt,
+            bv. "ma,wo,vr" of "ma,di,wo,do,vr,za".
+        porties:
+          type: integer
+          description: Standaard aantal porties per bezorging. Default 1.
+        vast_toetje:
+          type: string
+          enum: [ja, nee]
+          description: Default nee.
+        bezorgwijze:
+          type: string
+          enum: [bezorgen, ophalen, ter_plaatse]
+        vaste_bezorgtijd:
+          type: string
+          description: HH:MM
+        bezorg_opmerkingen:
+          type: string
+        dieetwensen:
+          type: string
+        actief:
+          type: string
+          enum: [ja, nee]
+          description: Default ja.
+    MenuEntry:
+      type: object
+      required: [token, action, datum, menu]
+      properties:
+        token:
+          type: string
+        action:
+          type: string
+          enum: [menu]
+        datum:
+          type: string
+          description: YYYY-MM-DD
+        menu:
+          type: string
+          description: >
+            Vrije tekst beschrijving van het menu, bv. "aardappel, broccoli,
+            sukade langzaam gegaard" of "stamppot boerenkool" of
+            "kabeljauw, salade".
