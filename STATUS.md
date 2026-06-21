@@ -34,6 +34,20 @@ Productie-migratie naar Antje's account: zie onderaan.
 - Tabs: `Klanten` (rooster, porties, vast_toetje, bezorgwijze), `Afwijkingen`
 - **Oud (te decommissioneren)**: `19qx7Or__9pwEp6KtMjLmm7Hq1Nc0hM0Rghd5VV0U9Pc` (blijft staan tot v2 in productie)
 
+### Werkrooster
+- Eigen sheet, **snapshot per week** (los van de weekplanningen).
+- Tabs: `Medewerkers` (naam, type, actief), `Diensten` (week, weekdag, naam, begin, eind, notitie)
+- **Eén sheet, één keer uploaden.** Alle weken leven naast elkaar in `Diensten`,
+  onderscheiden door de kolom `week` (`2026-14`, `2026-15`, …). Nieuwe weken komen
+  erbij via de API (`week_kopieer` + `dienst`) — géén nieuw bestand per week.
+- **Seed (eenmalig uploaden om de live sheet te maken)** — kies één:
+  - `scripts/build_werkrooster.py` → lege variant (blanco beginnen).
+  - `build/werkrooster-week-2026-14.xlsx` → gevuld met week 14 als startpunt
+    (gegenereerd uit de laatst bekende weekplanning; niet in git, zie `build/.gitignore`).
+- Na upload: `WERKROOSTER_SHEET_ID` in Apps Script invullen. Daarna nooit meer
+  uploaden; al het beheer gebeurt in de live sheet via de GPT.
+- Export/print voor in de keuken: nog te doen (aparte vervolgstap).
+
 ## Openstaande punten
 - Tijdelijke klant-IDs 9001–9006 in bezorgservice-sheet moeten vervangen
   worden door echte nummers (input via Antje).
@@ -43,13 +57,15 @@ Productie-migratie naar Antje's account: zie onderaan.
   via `Afwijkingen` opgelost door elke oneven week een annulering te zetten.
   Bij meer klanten met dit ritme: frequentie-veld toevoegen.
 - Eerste foutieve nieuwe sheet `Bezorgservice (nieuw)` (`1nPLI…`) moet weg.
+- Werkrooster: sheet aanmaken + `WERKROOSTER_SHEET_ID` invullen, daarna end-to-end testen.
+- Werkrooster: wekelijkse print/export voor in de keuken nog bouwen.
 
 ## Productie-migratie naar Antje's account
 
 Te doen wanneer Antje klaar is om dit live te zetten:
 
 1. **Drie kalenders** in Antje's account aanmaken (`Taverne`, `MSPA`, `Jules Huiskamer`); per kalender delen met Tonko (`Make changes to events`).
-2. **Bezorgservice v2 sheet** eigenaarschap overdragen: Tonko → Share → Antje toevoegen → klik op haar rol → `Make owner`. Antje accepteert via mail. Sheet-ID blijft hetzelfde.
+2. **Bezorgservice v2 sheet + Werkrooster sheet** eigenaarschap overdragen: Tonko → Share → Antje toevoegen → klik op haar rol → `Make owner`. Antje accepteert via mail. Sheet-IDs blijven hetzelfde.
 3. **Apps Script project** kopiëren naar Antje's account: Tonko deelt project met Antje (Editor) → Antje doet `File → Make a copy` → deelt kopie weer met Tonko (Editor).
 4. **Antje deployt** de kopie als web app (`Execute as: Me`, `Anyone`). Eerste run vraagt autorisatie voor Calendar + Sheets.
 5. **Nieuwe Web App URL** vervangen in `docs/openapi.yaml` en de Custom GPT action.

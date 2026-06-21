@@ -5,6 +5,16 @@ Eén regel per wijziging, formaat: `- YYYY-MM-DD — wat er veranderd is (welk b
 Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
+## 2026-06-21 (branch feat/werkrooster-beheer)
+- `src/werkrooster.js` toegevoegd: 9 functies (`handleWerkrooster`, `handleDienst`, `handleWeekKopieer`, `handleMedewerker`, `vindDienstRij`, `vindMedewerkerRij`, `normalizeWeek`, `isoWeekLabel`, `openWerkroosterSheet`).
+- `src/config.js`: `WERKROOSTER_SHEET_ID` en `MEDEWERKER_TYPES` toegevoegd.
+- `src/main.js`: routing voor `werkrooster`, `dienst`, `week_kopieer`, `medewerker` toegevoegd.
+- `appsscript.json`: `src/werkrooster` aan `filePushOrder` toegevoegd.
+- `docs/openapi.yaml`: GET-action `werkrooster` + `week`-param; schema's `Dienst`, `WeekKopieer`, `Medewerker` in `oneOf` + discriminator.
+- `docs/chatgpt-prompt.md`: sectie Werkrooster (opvragen, dienst, kopieer week, medewerker; altijd datum meegeven).
+- `scripts/build_werkrooster.py` toegevoegd: genereert de Werkrooster-sheet (Medewerkers geseed, lege Diensten).
+- `BESLISSINGEN.md`: snapshot-per-week vs. rooster+afwijkingen; werkrooster mag bewerkt/verwijderd. `GOTCHAS.md`: ISO-weeklabel jaargrens.
+
 ## 2026-06-21 (branch feat/kalender-event-optionele-tijden)
 - `docs/apps-script-calendar.js`: `begin` en `eind` optioneel in `handleCreate`. Geen `begin` → heel-dag event; `begin` zonder `eind` → event van 1 uur.
 - `docs/openapi.yaml`: `begin` en `eind` uit `required` van `KalenderEntry`; beschrijving van de drie varianten toegevoegd.

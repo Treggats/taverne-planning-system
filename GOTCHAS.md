@@ -7,6 +7,24 @@ half uur kwijt bent geweest aan iets dat in retrospect logisch was.
 
 ---
 
+## ISO-weeklabel: weekjaar ≠ kalenderjaar rond de jaargrens
+_Vastgelegd: 2026-06-21_
+
+Het werkrooster sleutelt op ISO-weeklabel `YYYY-WW` (`isoWeekLabel` in
+`src/werkrooster.js`). ISO-8601 telt week 1 als de week met de eerste
+donderdag van het jaar, en de `YYYY` is het **weekjaar**, niet per se het
+kalenderjaar van de datum.
+
+**Gevolg:** eind december/begin januari kan een datum in een ander jaar vallen
+dan je verwacht. 2026-01-01 hoort bij week `2026-1`, maar 2025-12-29 t/m
+2025-12-31 horen óók bij `2026-1` (maandag t/m woensdag van die ISO-week). Het
+weeklabel is dus niet zomaar `datum.getFullYear()`.
+
+**Waarom dit zo gekozen is:** de bestaande weekplanningen heten al
+`Weekplanning 2026-14` (ISO, zonder zero-padding), dus we volgen exact die
+conventie. Niet zelf weeknummers in de GPT laten rekenen — altijd een `datum`
+meegeven en het label server-side bepalen.
+
 ## Apps Script POST via curl: redirect-handling
 _Vastgelegd: 2026-06-20_
 

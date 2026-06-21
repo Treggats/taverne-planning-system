@@ -8,6 +8,8 @@ const CALENDARS = {
 };
 
 const BEZORGSERVICE_SHEET_ID = '1r5i_SUqkW1FnV2jlVcAMumQZVMJMUWWTul0Cxo_WPjI';
+const WERKROOSTER_SHEET_ID = 'VUL_WERKROOSTER_SHEET_ID_IN';
 const WEEKDAGEN = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
 const AFWIJKING_TYPES = ['annulering', 'wijziging', 'extra'];
 const BEZORGWIJZEN = ['bezorgen', 'ophalen', 'ter_plaatse'];
+const MEDEWERKER_TYPES = ['vast', 'stagiair', 'vrijwilliger'];

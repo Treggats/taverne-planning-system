@@ -17,6 +17,10 @@ function doGet(e) {
     return handleBezorgingen(e.parameter.datum);
   }
 
+  if (action === 'werkrooster') {
+    return handleWerkrooster(e.parameter.week, e.parameter.datum);
+  }
+
   return response({ error: 'Unknown action' });
 }
 
@@ -39,6 +43,18 @@ function doPost(e) {
 
   if (action === 'menu') {
     return handleMenu(body);
+  }
+
+  if (action === 'dienst') {
+    return handleDienst(body);
+  }
+
+  if (action === 'week_kopieer') {
+    return handleWeekKopieer(body);
+  }
+
+  if (action === 'medewerker') {
+    return handleMedewerker(body);
   }
 
   return handleCreate(body);
