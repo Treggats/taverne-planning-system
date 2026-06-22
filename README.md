@@ -70,6 +70,16 @@ Google Calendar (3 kalenders) + Google Sheets (bezorgservice, werkrooster)
 Systeem draait momenteel in Tonko's account (test). Migratie naar Antje's
 account: zie `STATUS.md` voor de stap-voor-stap checklist.
 
+## Documentatie
+
+Begin hier om de stand van zaken te begrijpen:
+
+- `STATUS.md` — huidige staat + openstaande punten
+- `CHANGELOG.md` — chronologisch logboek van wijzigingen
+- `BESLISSINGEN.md` — designkeuzes met motivatie
+- `GOTCHAS.md` — valkuilen van de externe systemen
+- `CLAUDE.md` — projectinstructies en toestemmingsregels
+
 ## Contacten
 
 - Eindgebruiker: Antje Dijkstra (antjec.dijkstra@gmail.com)
