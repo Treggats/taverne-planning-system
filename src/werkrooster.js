@@ -160,6 +160,19 @@ function findShiftRow(sheet, headers, week, weekday, name) {
   return -1;
 }
 
+function handleListEmployees() {
+  const employees = readRows(openScheduleSheet(), 'Medewerkers')
+    .map(e => ({
+      naam:   String(e.naam ?? '').trim(),
+      type:   String(e.type ?? '').trim(),
+      actief: String(e.actief ?? '').trim(),
+    }))
+    .filter(e => e.naam !== '');
+
+  employees.sort((a, b) => a.naam.localeCompare(b.naam));
+  return response({ medewerkers: employees });
+}
+
 function findEmployeeRow(sheet, headers, name) {
   const values = sheet.getDataRange().getValues();
   const n = headers.indexOf('naam');

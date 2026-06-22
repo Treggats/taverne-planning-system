@@ -21,6 +21,10 @@ function doGet(e) {
     return handleSchedule(e.parameter.week, e.parameter.datum);
   }
 
+  if (action === 'medewerkers') {
+    return handleListEmployees();
+  }
+
   return response({ error: 'Unknown action' });
 }
 
