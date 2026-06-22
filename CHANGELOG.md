@@ -6,7 +6,10 @@ Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
 ## 2026-06-22 (branch docs/productie-afgerond)
-- Productie-migratie afgerond: Custom GPT staat in Antje's eigen ChatGPT-account, gekoppeld aan de productie-URL. `STATUS.md` bijgewerkt (migratie afgerond; restpunten: oude deployment verifiëren/verwijderen — reageerde nog —, testdata + test-kalenders opruimen).
+- Productie-migratie grotendeels afgerond: Custom GPT in Antje's eigen ChatGPT, gekoppeld aan de productie-URL.
+- **Correctie na diagnose**: productie bleek te draaien in project `1TMjIVKp` (het ooit per ongeluk aangemaakte project, door Antje overgedragen+gedeployed), terwijl clasp naar het oude `13TY851` wees. Productie draaide daardoor verouderde code (tijdzone-test 10:00→18:00) en mogelijk oude sheet-ID's. `.clasp.json` omgezet naar `1TMjIVKp`; actuele code naar HEAD gepusht; Antje moet de deployment opnieuw uitrollen (executeAs=Antje) om het live te krijgen. `13TY851` (met levende deployment `AKfycbwdRn…`) is verweesd en mag weg. `STATUS.md` bijgewerkt.
+- Antje heeft opnieuw uitgerold; **productie geverifieerd**: actuele code live (tijdzone `10:00→10:00`, reads + schrijven tegen Antje's sheets).
+- Oud testproject `13TY851` + endpoint `AKfycbwdRn…` definitief verwijderd (endpoint geeft nu 404). **Migratie volledig afgerond**: één project over (`1TMjIVKp`, productie, Antje).
 
 ## 2026-06-22 (branch chore/productie-url-antje)
 - Productie-migratie grotendeels rond: Apps Script-project overgedragen aan Antje, nieuwe deployment door Antje (`executeAs = Antje`, `AKfycbz81oYz…`), GPT-action naar de nieuwe URL. Geverifieerd tegen de nieuwe URL: reads + schrijven (kalender event op Antje's Taverne, dienst, afwijking) werken.
