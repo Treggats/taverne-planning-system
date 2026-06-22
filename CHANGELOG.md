@@ -5,6 +5,10 @@ Eén regel per wijziging, formaat: `- YYYY-MM-DD — wat er veranderd is (welk b
 Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
+## 2026-06-22 (branch fix/openapi-url)
+- `docs/openapi.yaml`: server-URL ingevuld (echte `/exec`-basis) en path van `/` → `/exec`. De combinatie `/` gaf `.../exec/` (trailing slash) wat Apps Script afwijst ("Pagina niet gevonden"). Token-`default: JOUW_TOKEN` ook op de 7 POST-schema's gezet zodat ChatGPT het token bij POST meestuurt.
+- `docs/custom-gpt-setup.md` toegevoegd: stappenplan om de Custom GPT te koppelen (instructions, action, schema, token-vervang, testen, delen).
+
 ## 2026-06-22 (branch fix/webapp-access)
 - `appsscript.json`: `webapp`-blok toegevoegd (`executeAs: USER_DEPLOYING`, `access: ANYONE_ANONYMOUS`). Zonder dit verloor de deployment bij `clasp deploy` zijn web-app-toegang (HTML "Pagina niet gevonden" i.p.v. JSON). Zie `GOTCHAS.md` + `docs/clasp-deploy.md`.
 - `src/` live gezet via clasp op de bestaande `/exec`-URL (deployment `AKfycbwdRn…` @4); clasp naar het originele script gewezen (`scriptId 13TY851…`). Werkrooster end-to-end getest: GET week 2026-14 + POST dienst upsert/delete (incl. ISO-week via `datum`).

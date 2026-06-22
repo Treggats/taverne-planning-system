@@ -26,8 +26,10 @@ Productie-migratie naar Antje's account: zie onderaan.
 
 ### Custom GPT
 - Prompt: `docs/chatgpt-prompt.md`
-- Spreekt Apps Script aan via OpenAPI schema
-- Nog niet aangemaakt (wacht op Antje's ChatGPT toegang).
+- Spreekt Apps Script aan via OpenAPI schema (`docs/openapi.yaml`)
+- Wordt nu opgezet — stappenplan in `docs/custom-gpt-setup.md`.
+- Token gaat via het schema (`default: JOUW_TOKEN` → vervangen door het echte
+  token); Authentication = None.
 
 ### Google Drive
 - Weekplanningen map: `1HNs0w_MOtTSbgI4XekNuZTnoIHvX9sK1` (eigenaar Antje)
