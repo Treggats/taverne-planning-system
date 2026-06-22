@@ -33,9 +33,8 @@ kalenders én sheets. Geverifieerd: today/week/werkrooster/bezorgingen + schrijv
 ### Custom GPT
 - Prompt: `docs/chatgpt-prompt.md`
 - Spreekt Apps Script aan via OpenAPI schema (`docs/openapi.yaml`)
-- Gekoppeld aan de nieuwe productie-URL en end-to-end getest (lezen + schrijven).
-- **Nog te doen**: als de GPT nog in Tonko's ChatGPT staat, een eigen GPT in
-  Antje's ChatGPT-account aanmaken (zelfde prompt + schema). Zie `docs/custom-gpt-setup.md`.
+- **In Antje's eigen ChatGPT-account**, gekoppeld aan de productie-URL,
+  end-to-end getest (lezen + schrijven). Setup: `docs/custom-gpt-setup.md`.
 - Token gaat via het schema (`default: JOUW_TOKEN` → vervangen door het echte
   token); Authentication = None.
 
@@ -76,10 +75,17 @@ kalenders én sheets. Geverifieerd: today/week/werkrooster/bezorgingen + schrijv
 
 ## Productie-migratie naar Antje's account
 
-**Voortgang (grotendeels afgerond):** kalenders ✅, sheets ✅, Apps Script-project
-overgedragen ✅, deployment als Antje (`executeAs`) ✅, nieuwe URL in schema ✅.
-**Resterend:** Custom GPT in Antje's eigen ChatGPT (indien nog niet); oude
-deployment/test-kalenders opruimen; Tonko als editor laten staan voor beheer.
+**Afgerond:** kalenders ✅, sheets ✅, Apps Script-project overgedragen ✅,
+deployment als Antje (`executeAs`) ✅, nieuwe URL in schema ✅, Custom GPT in
+Antje's eigen ChatGPT ✅. Het systeem draait in productie.
+
+**Resterend (klein):**
+- Oude deployment `AKfycbwdRn…` reageerde bij laatste check nog (lijkt niet écht
+  uitgeschakeld) — verifiëren/verwijderen, want hij draait als Tonko.
+- Tonko's oude test-kalenders opruimen.
+- Tonko als editor op het project laten staan (clasp-beheer).
+- Testrijen wissen: kalender-event 2026-09-01 "ZZ_TEST kalender" + afwijking
+  klant 216 / 2026-12-31.
 
 Doel: alles draait in Antje's account; Tonko houdt editor-toegang voor beheer.
 De web app moet **als Antje** draaien (`executeAs`), zodat hij bij háár

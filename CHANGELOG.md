@@ -5,6 +5,9 @@ Eén regel per wijziging, formaat: `- YYYY-MM-DD — wat er veranderd is (welk b
 Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
+## 2026-06-22 (branch docs/productie-afgerond)
+- Productie-migratie afgerond: Custom GPT staat in Antje's eigen ChatGPT-account, gekoppeld aan de productie-URL. `STATUS.md` bijgewerkt (migratie afgerond; restpunten: oude deployment verifiëren/verwijderen — reageerde nog —, testdata + test-kalenders opruimen).
+
 ## 2026-06-22 (branch chore/productie-url-antje)
 - Productie-migratie grotendeels rond: Apps Script-project overgedragen aan Antje, nieuwe deployment door Antje (`executeAs = Antje`, `AKfycbz81oYz…`), GPT-action naar de nieuwe URL. Geverifieerd tegen de nieuwe URL: reads + schrijven (kalender event op Antje's Taverne, dienst, afwijking) werken.
 - `docs/openapi.yaml`: `servers.url` → nieuwe productie-`/exec`-URL. `src/config.js`: ongebruikte `URL`-constante (oude deployment) verwijderd. `STATUS.md` bijgewerkt naar productiestaat.
