@@ -44,6 +44,7 @@ Google Calendar (3 kalenders) + Google Sheets (bezorgservice, werkrooster)
 | `docs/apps-script-calendar.js` | Originele monolithische broncode (archief) |
 | `docs/openapi.yaml` | OpenAPI schema voor Custom GPT action |
 | `docs/chatgpt-prompt.md` | Systeemprompt voor het Custom GPT |
+| `docs/custom-gpt-setup.md` | Stappenplan om de Custom GPT te koppelen aan de API |
 | `docs/kalenders.md` | Volledige kalenderindeling met alle activiteiten |
 | `docs/clasp-deploy.md` | Hoe je `src/` met clasp pusht en deployt |
 | `docs/smoke-tests.md` | GPT-prompts om alle endpoints te verifiëren |

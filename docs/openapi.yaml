@@ -3,9 +3,9 @@ info:
   title: Antje's Taverne Planning API
   version: 3.0.0
 servers:
-  - url: JOUW_WEB_APP_URL
+  - url: https://script.google.com/macros/s/AKfycbwdRnxoP1LtrWUF_jaXXO4Mhim9PqnqUR1QpZM1_1yQYVP00gOGv6JyVVCigSkYONlF
 paths:
-  /:
+  /exec:
     get:
       operationId: getPlanning
       summary: Haal planning of bezorglijst op
@@ -92,6 +92,7 @@ components:
       properties:
         token:
           type: string
+          default: JOUW_TOKEN
         action:
           type: string
           enum: [kalender_event]
@@ -137,6 +138,7 @@ components:
       properties:
         token:
           type: string
+          default: JOUW_TOKEN
         action:
           type: string
           enum: [afwijking]
@@ -182,6 +184,7 @@ components:
       properties:
         token:
           type: string
+          default: JOUW_TOKEN
         action:
           type: string
           enum: [klant]
@@ -228,6 +231,7 @@ components:
       properties:
         token:
           type: string
+          default: JOUW_TOKEN
         action:
           type: string
           enum: [menu]
@@ -250,6 +254,7 @@ components:
       properties:
         token:
           type: string
+          default: JOUW_TOKEN
         action:
           type: string
           enum: [dienst]
@@ -285,6 +290,7 @@ components:
       properties:
         token:
           type: string
+          default: JOUW_TOKEN
         action:
           type: string
           enum: [week_kopieer]
@@ -307,6 +313,7 @@ components:
       properties:
         token:
           type: string
+          default: JOUW_TOKEN
         action:
           type: string
           enum: [medewerker]
