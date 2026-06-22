@@ -8,8 +8,9 @@ _Laatst bijgewerkt: 2026-06-22_
 
 ## Componenten
 
-Huidige opstelling = **test-omgeving in Tonko's account**.
-Productie-migratie naar Antje's account: zie onderaan.
+Huidige opstelling = **test-omgeving in Tonko's account** — volledig werkend en
+end-to-end getest (kalender, bezorgservice, werkrooster, Custom GPT).
+Volgende grote stap: productie-migratie naar Antje's account (zie onderaan).
 
 ### Google Calendar (Tonko's account, test)
 - `Taverne`, `MSPA`, `Jules Huiskamer` — door Tonko aangemaakt voor end-to-end test.
@@ -27,7 +28,9 @@ Productie-migratie naar Antje's account: zie onderaan.
 ### Custom GPT
 - Prompt: `docs/chatgpt-prompt.md`
 - Spreekt Apps Script aan via OpenAPI schema (`docs/openapi.yaml`)
-- Wordt nu opgezet — stappenplan in `docs/custom-gpt-setup.md`.
+- **Aangemaakt en gekoppeld in Tonko's ChatGPT (test); end-to-end getest:
+  lezen (today + werkrooster mét data) en schrijven (kalender event).**
+- Setup-stappen: `docs/custom-gpt-setup.md`.
 - Token gaat via het schema (`default: JOUW_TOKEN` → vervangen door het echte
   token); Authentication = None.
 
