@@ -44,8 +44,9 @@ Productie-migratie naar Antje's account: zie onderaan.
   - `scripts/build_werkrooster.py` → lege variant (blanco beginnen).
   - `build/werkrooster-week-2026-14.xlsx` → gevuld met week 14 als startpunt
     (gegenereerd uit de laatst bekende weekplanning; niet in git, zie `build/.gitignore`).
-- Na upload: `WERKROOSTER_SHEET_ID` in Apps Script invullen. Daarna nooit meer
-  uploaden; al het beheer gebeurt in de live sheet via de GPT.
+- Sheet aangemaakt; `SCHEDULE_SHEET_ID` in `src/config.js` ingevuld
+  (`1Blxy4y…`). Daarna nooit meer uploaden; al het beheer gebeurt in de live
+  sheet via de GPT.
 - Export/print voor in de keuken: nog te doen (aparte vervolgstap).
 
 ## Openstaande punten
@@ -57,7 +58,7 @@ Productie-migratie naar Antje's account: zie onderaan.
   via `Afwijkingen` opgelost door elke oneven week een annulering te zetten.
   Bij meer klanten met dit ritme: frequentie-veld toevoegen.
 - Eerste foutieve nieuwe sheet `Bezorgservice (nieuw)` (`1nPLI…`) moet weg.
-- Werkrooster: sheet aanmaken + `WERKROOSTER_SHEET_ID` invullen, daarna end-to-end testen.
+- Werkrooster: `src/` deployen (clasp push + redeploy) en end-to-end testen — live web app draait nog oude code.
 - Werkrooster: wekelijkse print/export voor in de keuken nog bouwen.
 
 ## Productie-migratie naar Antje's account
