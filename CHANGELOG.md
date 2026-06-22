@@ -6,7 +6,8 @@ Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
 ## 2026-06-22 (branch fix/openapi-url)
-- `docs/openapi.yaml`: server-URL ingevuld (echte `/exec`-basis) en path van `/` → `/exec`. De combinatie `/` gaf `.../exec/` (trailing slash) wat Apps Script afwijst ("Pagina niet gevonden"). Token-`default: JOUW_TOKEN` ook op de 7 POST-schema's gezet zodat ChatGPT het token bij POST meestuurt.
+- `docs/openapi.yaml`: server-URL ingevuld (echte `/exec`-basis) en path van `/` → `/exec`. De combinatie `/` gaf `.../exec/` (trailing slash) wat Apps Script afwijst ("Pagina niet gevonden").
+- `docs/openapi.yaml`: POST `oneOf`/discriminator (7 sub-schema's) vervangen door één plat `PostAction`-object met `action`-enum + alle velden optioneel. ChatGPT Actions weigert `oneOf` request bodies ("request body schema is not an object schema"). Server routeert/valideert al per `action`. Token-default op het ene PostAction-object (GET + POST = 2× `JOUW_TOKEN`).
 - `docs/custom-gpt-setup.md` toegevoegd: stappenplan om de Custom GPT te koppelen (instructions, action, schema, token-vervang, testen, delen).
 
 ## 2026-06-22 (branch fix/webapp-access)

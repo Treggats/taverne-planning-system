@@ -7,6 +7,24 @@ half uur kwijt bent geweest aan iets dat in retrospect logisch was.
 
 ---
 
+## ChatGPT Actions accepteren geen `oneOf` request body
+_Vastgelegd: 2026-06-22_
+
+Bij het plakken van het OpenAPI-schema in een Custom GPT:
+`request body schema is not an object schema; skipping` +
+`skipping function due to errors`.
+
+ChatGPT Actions willen dat de POST-body **één object-schema** is. Een
+`oneOf`/`anyOf` met `discriminator` (hoe correct ook qua OpenAPI) wordt
+geweigerd, en daarmee valt de hele POST-operatie weg.
+
+**Opgelost** door de 7 POST-varianten samen te voegen tot één `PostAction`-
+object: `action` als enum + alle velden optioneel, met per veld in de
+`description` welke action het betreft. De Apps Script routeert toch al op
+`action` en valideert de verplichte velden per type, dus een permissief schema
+is veilig. Conflict op `type` (afwijking vs medewerker) opgelost met een
+gecombineerde enum.
+
 ## clasp deploy zonder `webapp`-blok sloopt een werkende web app
 _Vastgelegd: 2026-06-22_
 

@@ -56,274 +56,167 @@ paths:
     post:
       operationId: postAction
       summary: >
-        Voeg kalender entry, bezorgservice afwijking of nieuwe bezorgservice
-        klant toe. action veld bepaalt welke.
+        Eén endpoint voor alle schrijfacties. Het veld action bepaalt het type;
+        vul alleen de velden die bij die action horen (zie de beschrijvingen).
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/KalenderEntry'
-                - $ref: '#/components/schemas/Afwijking'
-                - $ref: '#/components/schemas/Klant'
-                - $ref: '#/components/schemas/MenuEntry'
-                - $ref: '#/components/schemas/Dienst'
-                - $ref: '#/components/schemas/WeekKopieer'
-                - $ref: '#/components/schemas/Medewerker'
-              discriminator:
-                propertyName: action
-                mapping:
-                  kalender_event: '#/components/schemas/KalenderEntry'
-                  afwijking: '#/components/schemas/Afwijking'
-                  klant: '#/components/schemas/Klant'
-                  menu: '#/components/schemas/MenuEntry'
-                  dienst: '#/components/schemas/Dienst'
-                  week_kopieer: '#/components/schemas/WeekKopieer'
-                  medewerker: '#/components/schemas/Medewerker'
+              $ref: '#/components/schemas/PostAction'
       responses:
         '200':
           description: Bewerking gelukt
 components:
   schemas:
-    KalenderEntry:
+    PostAction:
       type: object
-      required: [token, action, kalender, datum, naam]
+      required: [token, action]
       properties:
         token:
           type: string
           default: JOUW_TOKEN
         action:
           type: string
-          enum: [kalender_event]
+          enum: [kalender_event, menu, afwijking, klant, dienst, week_kopieer, medewerker]
+          description: >
+            kalender_event = nieuw kalender event;
+            menu = menu als all-day event;
+            afwijking = bezorgafwijking;
+            klant = nieuwe bezorgklant;
+            dienst = werkdienst toevoegen/wijzigen/verwijderen;
+            week_kopieer = werkrooster van een week kopiëren;
+            medewerker = medewerker toevoegen/bijwerken.
         kalender:
           type: string
           enum: [taverne, mspa, jules]
           description: >
-            taverne = commercieel (Cosis, KOSKAMP, Beweegtuin, etc.),
-            mspa = sociaal (sjoelen, rummicub, circus, ExpresZo),
-            jules = koffie/ontmoeting (COC, Regenboog Café, Zonder Stempel)
-        datum:
-          type: string
-          description: YYYY-MM-DD
-        begin:
-          type: string
-          description: >
-            HH:MM. Weglaten voor een heel-dag event. Als begin wel aanwezig
-            is maar eind niet, duurt het event 1 uur.
-        eind:
-          type: string
-          description: HH:MM. Optioneel — zie begin.
+            Alleen kalender_event. taverne = commercieel (Cosis, KOSKAMP,
+            Beweegtuin), mspa = sociaal (sjoelen, rummicub, ExpresZo),
+            jules = koffie/ontmoeting (COC, Regenboog Café, Zonder Stempel).
         naam:
           type: string
+          description: >
+            kalender_event = naam van het event; dienst/medewerker = naam van
+            de persoon.
         organisatie:
           type: string
+          description: Alleen kalender_event (optioneel).
         locatie:
           type: string
           description: >
-            Taverne-ruimtes: 400m, TT, Renners, Dug Out, Ballo.
-            MSPA/Jules: Jules Huiskamer.
+            Alleen kalender_event (optioneel). Taverne-ruimtes: 400m, TT,
+            Renners, Dug Out, Ballo. MSPA/Jules: Jules Huiskamer.
         aantal:
           type: integer
+          description: Alleen kalender_event (optioneel).
         lunch:
           type: string
           description: >
-            ja (standaard = A+B+fruit), nee, of specifieke omschrijving
-            bij afwijking (bijv. vegetarisch, A+fruit).
+            Alleen kalender_event. ja (standaard = A+B+fruit), nee, of een
+            specifieke omschrijving bij afwijking (bijv. vegetarisch, A+fruit).
         notities:
           type: string
-    Afwijking:
-      type: object
-      required: [token, action, klant_id, type]
-      properties:
-        token:
-          type: string
-          default: JOUW_TOKEN
-        action:
-          type: string
-          enum: [afwijking]
-        klant_id:
-          type: integer
-          description: ID van de bestaande klant.
-        type:
-          type: string
-          enum: [annulering, wijziging, extra]
-          description: >
-            annulering = klant krijgt deze keer niets,
-            wijziging = klant krijgt iets anders (tijd/porties/toetje/bezorger/bezorgwijze),
-            extra = klant krijgt een extra bezorging buiten rooster.
-        datum:
-          type: string
-          description: YYYY-MM-DD voor eenmalige afwijking. Eén van datum/weekdag is verplicht.
-        weekdag:
-          type: string
-          enum: [ma, di, wo, do, vr, za, zo]
-          description: Voor terugkerende weekdag-afwijking.
-        porties:
-          type: integer
-          description: Overschrijft klant.porties (alleen bij wijziging of extra).
-        toetje:
-          type: string
-          enum: [ja, nee]
-          description: Overschrijft klant.vast_toetje.
-        tijd:
-          type: string
-          description: HH:MM, overschrijft klant.vaste_bezorgtijd.
-        bezorgwijze:
-          type: string
-          enum: [bezorgen, ophalen, ter_plaatse]
-          description: Overschrijft klant.bezorgwijze.
-        bezorger:
-          type: string
-          description: Wie er bezorgt op deze dag.
-        notitie:
-          type: string
-    Klant:
-      type: object
-      required: [token, action, voornaam, rooster, vaste_bezorgtijd, bezorgwijze]
-      properties:
-        token:
-          type: string
-          default: JOUW_TOKEN
-        action:
-          type: string
-          enum: [klant]
-        klant_id:
-          type: integer
-          description: Optioneel, wordt automatisch toegekend als leeg.
-        voornaam:
-          type: string
-        achternaam:
-          type: string
-        adres:
-          type: string
-        telefoon:
-          type: string
-        rooster:
-          type: string
-          description: >
-            Comma-separated weekdagen waarop de klant bestelt,
-            bv. "ma,wo,vr" of "ma,di,wo,do,vr,za".
-        porties:
-          type: integer
-          description: Standaard aantal porties per bezorging. Default 1.
-        vast_toetje:
-          type: string
-          enum: [ja, nee]
-          description: Default nee.
-        bezorgwijze:
-          type: string
-          enum: [bezorgen, ophalen, ter_plaatse]
-        vaste_bezorgtijd:
-          type: string
-          description: HH:MM
-        bezorg_opmerkingen:
-          type: string
-        dieetwensen:
-          type: string
-        actief:
-          type: string
-          enum: [ja, nee]
-          description: Default ja.
-    MenuEntry:
-      type: object
-      required: [token, action, datum, menu]
-      properties:
-        token:
-          type: string
-          default: JOUW_TOKEN
-        action:
-          type: string
-          enum: [menu]
-        datum:
-          type: string
-          description: YYYY-MM-DD
+          description: Alleen kalender_event (optioneel).
         menu:
           type: string
           description: >
-            Vrije tekst beschrijving van het menu, bv. "aardappel, broccoli,
-            sukade langzaam gegaard" of "stamppot boerenkool" of
-            "kabeljauw, salade".
-    Dienst:
-      type: object
-      required: [token, action, weekdag, naam]
-      description: >
-        Eén werkdienst van één persoon op één weekdag in een week. Upsert:
-        bestaat de dienst al (zelfde week + weekdag + naam) dan wordt hij
-        overschreven. Begin leeg laten verwijdert de dienst.
-      properties:
-        token:
-          type: string
-          default: JOUW_TOKEN
-        action:
-          type: string
-          enum: [dienst]
-        week:
-          type: string
-          description: ISO-weeklabel YYYY-WW (bijv. 2026-14). Gebruik week of datum.
+            Alleen menu. Vrije tekst, bv. "aardappel, broccoli, sukade" of
+            "stamppot boerenkool".
         datum:
           type: string
           description: >
-            YYYY-MM-DD, een dag in de doelweek. Server bepaalt de ISO-week.
-            Gebruik dit i.p.v. week zodat het systeem het weeknummer rekent.
+            YYYY-MM-DD. Bij kalender_event/menu de datum; bij dienst/week_kopieer
+            een dag in de bedoelde week (server bepaalt de ISO-week).
+        begin:
+          type: string
+          description: >
+            HH:MM. kalender_event: leeg laten = heel-dag event, begin zonder
+            eind = 1 uur. dienst: leeg laten = dienst verwijderen.
+        eind:
+          type: string
+          description: HH:MM (optioneel) bij kalender_event of dienst.
         weekdag:
           type: string
           enum: [ma, di, wo, do, vr, za, zo]
-        naam:
+          description: Bij afwijking (terugkerend) of dienst.
+        week:
           type: string
-          description: Naam van de medewerker (zoals in tab Medewerkers).
-        begin:
-          type: string
-          description: HH:MM. Leeg laten verwijdert de dienst.
-        eind:
-          type: string
-          description: HH:MM. Optioneel.
-        notitie:
-          type: string
-          description: Bijv. "vanzelf", "slaapdienst".
-    WeekKopieer:
-      type: object
-      required: [token, action]
-      description: >
-        Kopieert alle diensten van een bronweek naar een lege doelweek
-        ("kopieer vorige week als startpunt"). De doelweek moet leeg zijn.
-      properties:
-        token:
-          type: string
-          default: JOUW_TOKEN
-        action:
-          type: string
-          enum: [week_kopieer]
-        van:
-          type: string
-          description: Bronweek ISO-label YYYY-WW. Gebruik van of van_datum.
-        van_datum:
-          type: string
-          description: YYYY-MM-DD in de bronweek.
-        naar:
-          type: string
-          description: Doelweek ISO-label YYYY-WW. Gebruik naar of naar_datum.
-        naar_datum:
-          type: string
-          description: YYYY-MM-DD in de doelweek.
-    Medewerker:
-      type: object
-      required: [token, action, naam]
-      description: Voegt een medewerker toe of werkt deze bij (op naam).
-      properties:
-        token:
-          type: string
-          default: JOUW_TOKEN
-        action:
-          type: string
-          enum: [medewerker]
-        naam:
-          type: string
+          description: ISO-weeklabel YYYY-WW voor dienst (of gebruik datum).
+        klant_id:
+          type: integer
+          description: >
+            afwijking = verplicht (bestaande klant); klant = optioneel, wordt
+            automatisch toegekend als leeg.
         type:
           type: string
-          enum: [vast, stagiair, vrijwilliger]
-          description: Default vast.
+          enum: [annulering, wijziging, extra, vast, stagiair, vrijwilliger]
+          description: >
+            Bij afwijking: annulering / wijziging / extra. Bij medewerker:
+            vast / stagiair / vrijwilliger.
+        porties:
+          type: integer
+          description: afwijking (override) of klant (standaard, default 1).
+        toetje:
+          type: string
+          enum: [ja, nee]
+          description: Alleen afwijking (override van vast_toetje).
+        tijd:
+          type: string
+          description: HH:MM. Alleen afwijking (override van vaste_bezorgtijd).
+        bezorgwijze:
+          type: string
+          enum: [bezorgen, ophalen, ter_plaatse]
+          description: afwijking (override) of klant.
+        bezorger:
+          type: string
+          description: Alleen afwijking (wie er bezorgt op deze dag).
+        notitie:
+          type: string
+          description: Bij afwijking of dienst.
+        voornaam:
+          type: string
+          description: Alleen klant (verplicht).
+        achternaam:
+          type: string
+          description: Alleen klant (optioneel).
+        adres:
+          type: string
+          description: Alleen klant (optioneel).
+        telefoon:
+          type: string
+          description: Alleen klant (optioneel).
+        rooster:
+          type: string
+          description: >
+            Alleen klant (verplicht). Comma-separated weekdagen, bv.
+            "ma,wo,vr" of "ma,di,wo,do,vr,za".
+        vast_toetje:
+          type: string
+          enum: [ja, nee]
+          description: Alleen klant (default nee).
+        vaste_bezorgtijd:
+          type: string
+          description: HH:MM. Alleen klant (verplicht).
+        bezorg_opmerkingen:
+          type: string
+          description: Alleen klant (optioneel).
+        dieetwensen:
+          type: string
+          description: Alleen klant (optioneel).
         actief:
           type: string
           enum: [ja, nee]
-          description: Default ja.
+          description: klant of medewerker (default ja).
+        van:
+          type: string
+          description: Alleen week_kopieer. Bronweek YYYY-WW (of gebruik van_datum).
+        van_datum:
+          type: string
+          description: Alleen week_kopieer. YYYY-MM-DD in de bronweek.
+        naar:
+          type: string
+          description: Alleen week_kopieer. Doelweek YYYY-WW (of gebruik naar_datum).
+        naar_datum:
+          type: string
+          description: Alleen week_kopieer. YYYY-MM-DD in de doelweek.

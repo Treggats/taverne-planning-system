@@ -31,8 +31,8 @@ Je hebt twee dingen nodig uit deze repo:
    niet via een header — Apps Script ontvangt geen custom headers.)
 3. **Schema**: plak de volledige inhoud van `docs/openapi.yaml`.
 4. **Vervang in het geplakte schema alle `JOUW_TOKEN` door het echte token**
-   (uit `src/config.js`). Het staat er 8× in (1× GET, 7× POST). Met
-   zoek-vervangen in één keer klaar. De server-URL staat al goed ingevuld.
+   (uit `src/config.js`). Het staat er 2× in (1× GET, 1× POST). De server-URL
+   staat al goed ingevuld.
 5. Onder het schema verschijnen nu twee **Available actions**:
    `getPlanning` (GET) en `postAction` (POST).
 6. **Privacy policy**: alleen verplicht als je de GPT later publiek deelt. Voor
