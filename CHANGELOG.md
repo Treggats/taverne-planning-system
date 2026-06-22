@@ -5,6 +5,9 @@ Eén regel per wijziging, formaat: `- YYYY-MM-DD — wat er veranderd is (welk b
 Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
+## 2026-06-22 (branch fix/timezone-times)
+- `src/utils-date.js` + `src/bezorgservice.js` + `src/werkrooster.js`: tijden tijdzone-robuust. `asTimeString(value, timeZone)` formatteert Date-cellen met de spreadsheet-tijdzone (`getSpreadsheetTimeZone()`) i.p.v. de script-tijdzone, zodat via de API geschreven tijden niet meer verschuiven. Gevonden via smoke test (10:00 → 18:00 op Antje's sheet). Live @7, geverifieerd (10:00 → 10:00). Zie `GOTCHAS.md`.
+
 ## 2026-06-22 (branch chore/nieuwe-sheet-ids)
 - `src/config.js`: `DELIVERY_SHEET_ID` en `SCHEDULE_SHEET_ID` naar de door Antje geüploade sheets. Live gedeployd (@6) en geverifieerd via smoke tests (GET bezorgingen + werkrooster geven correcte data; sheets bereikbaar voor het script). `STATUS.md` sheet-secties bijgewerkt.
 

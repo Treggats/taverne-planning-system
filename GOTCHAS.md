@@ -7,6 +7,27 @@ half uur kwijt bent geweest aan iets dat in retrospect logisch was.
 
 ---
 
+## Tijd-cellen schuiven als sheet-tijdzone ≠ script-tijdzone
+_Vastgelegd: 2026-06-22_
+
+Een via de API geschreven tijd (`begin`/`eind`/`tijd`) las +8 uur verschoven
+terug: `10:00` → `18:00`. Antje's geüploade sheet stond in een andere tijdzone
+dan het script (`Europe/Amsterdam`).
+
+**Mechanisme:** `appendRow("10:00")` laat Sheets er een echt *tijd-celtype* van
+maken. `getValues()` geeft dat terug als JS `Date`. Formatteerde je dat met de
+**script**-tijdzone (`Session.getScriptTimeZone()`) terwijl de **sheet** een
+andere tijdzone had, dan schoof de tijd met het verschil. Tekstcellen (zoals de
+seed-data) hebben dit niet, want die worden niet naar `Date` geconverteerd.
+
+**Opgelost** door `asTimeString(value, timeZone)` de **spreadsheet**-tijdzone
+mee te geven (`getSpreadsheetTimeZone()`). Schrijf-interpretatie en
+lees-formattering gebruiken dan dezelfde tijdzone; de script-tijdzone doet er
+niet meer toe. (Daarnaast staan de sheets nu op `Europe/Brussels`, zelfde
+offset.)
+
+---
+
 ## ChatGPT Actions accepteren geen `oneOf` request body
 _Vastgelegd: 2026-06-22_
 

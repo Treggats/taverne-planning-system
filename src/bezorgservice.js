@@ -20,8 +20,10 @@ function handleDeliveries(dateString) {
   const date = parseDate(dateString);
   const weekday = WEEKDAYS[date.getDay()];
 
-  const clients = readRows(openDeliverySheet(), 'Klanten');
-  const exceptions = readRows(openDeliverySheet(), 'Afwijkingen');
+  const deliverySheet = openDeliverySheet();
+  const timeZone = deliverySheet.getSpreadsheetTimeZone();
+  const clients = readRows(deliverySheet, 'Klanten');
+  const exceptions = readRows(deliverySheet, 'Afwijkingen');
 
   const relevant = exceptions.filter(a => exceptionAppliesOn(a, date, weekday));
 
@@ -43,12 +45,12 @@ function handleDeliveries(dateString) {
     .filter(c => String(c.actief).toLowerCase() === 'ja')
     .filter(c => scheduleIncludes(c.rooster, weekday))
     .filter(c => ! cancellations.has(String(c.klant_id)))
-    .map(c => buildDeliveryEntry(c, modifications[String(c.klant_id)]));
+    .map(c => buildDeliveryEntry(c, modifications[String(c.klant_id)], timeZone));
 
   for (const ex of relevant.filter(a => a.type === 'extra')) {
     const client = clientsById[String(ex.klant_id)];
     if (! client) continue;
-    entries.push(buildDeliveryEntry(client, ex));
+    entries.push(buildDeliveryEntry(client, ex, timeZone));
   }
 
   entries.sort((a, b) =>
@@ -153,7 +155,7 @@ function scheduleIncludes(schedule, weekday) {
   return String(schedule).split(',').map(s => s.trim()).indexOf(weekday) !== -1;
 }
 
-function buildDeliveryEntry(client, exception) {
+function buildDeliveryEntry(client, exception, timeZone) {
   const ex = exception || {};
   const dessert = (firstSet(ex.toetje, client.vast_toetje) === 'ja') ? 'ja' : 'nee';
   return {
@@ -161,7 +163,7 @@ function buildDeliveryEntry(client, exception) {
     naam: `${client.voornaam ?? ''} ${client.achternaam ?? ''}`.trim(),
     adres: client.adres ?? '',
     telefoon: client.telefoon ?? '',
-    tijd: asTimeString(firstSet(ex.tijd, client.vaste_bezorgtijd)),
+    tijd: asTimeString(firstSet(ex.tijd, client.vaste_bezorgtijd), timeZone),
     porties: firstSet(ex.porties, client.porties),
     toetje: dessert,
     bezorgwijze: firstSet(ex.bezorgwijze, client.bezorgwijze),

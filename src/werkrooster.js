@@ -8,14 +8,16 @@ function handleSchedule(week, dateString) {
     return response({ error: 'week (YYYY-WW) of datum (YYYY-MM-DD) verplicht' });
   }
 
-  const shifts = readRows(openScheduleSheet(), 'Diensten')
+  const scheduleSheet = openScheduleSheet();
+  const timeZone = scheduleSheet.getSpreadsheetTimeZone();
+  const shifts = readRows(scheduleSheet, 'Diensten')
     .filter(d => String(d.week).trim() === weekLabel)
     .map(d => ({
       week: weekLabel,
       weekdag: String(d.weekdag).trim(),
       naam: String(d.naam).trim(),
-      begin: asTimeString(d.begin),
-      eind: asTimeString(d.eind),
+      begin: asTimeString(d.begin, timeZone),
+      eind: asTimeString(d.eind, timeZone),
       notitie: d.notitie ?? '',
     }));
 
@@ -85,18 +87,19 @@ function handleWeekCopy(body) {
     return response({ error: 'van en naar mogen niet dezelfde week zijn' });
   }
 
-  const sheet = openScheduleSheet().getSheetByName('Diensten');
+  const scheduleSheet = openScheduleSheet();
+  const timeZone = scheduleSheet.getSpreadsheetTimeZone();
+  const sheet = scheduleSheet.getSheetByName('Diensten');
   const headers = readHeaders(sheet);
 
-  const source = readRows(openScheduleSheet(), 'Diensten')
-    .filter(d => String(d.week).trim() === from);
+  const allShifts = readRows(scheduleSheet, 'Diensten');
+  const source = allShifts.filter(d => String(d.week).trim() === from);
 
   if (source.length === 0) {
     return response({ error: `Geen diensten gevonden voor week ${from}` });
   }
 
-  const exists = readRows(openScheduleSheet(), 'Diensten')
-    .some(d => String(d.week).trim() === to);
+  const exists = allShifts.some(d => String(d.week).trim() === to);
 
   if (exists) {
     return response({ error: `Week ${to} bevat al diensten; eerst leegmaken` });
@@ -105,7 +108,7 @@ function handleWeekCopy(body) {
   const rows = source.map(d => headers.map(h => {
     if (h === 'week') return to;
     const v = d[h];
-    return (h === 'begin' || h === 'eind') ? asTimeString(v) : (v ?? '');
+    return (h === 'begin' || h === 'eind') ? asTimeString(v, timeZone) : (v ?? '');
   }));
 
   sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, headers.length).setValues(rows);
