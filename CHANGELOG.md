@@ -6,6 +6,7 @@ Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
 ## 2026-06-22 (branch chore/clasp-setup)
+- `appsscript.json`: `filePushOrder` verwijderd — dat is een `.clasp.json`-veld, geen manifest-veld; `clasp push` weigerde het. Laadvolgorde maakt niet uit (zie `GOTCHAS.md`).
 - `.claspignore` toegevoegd: pusht alleen `appsscript.json` + `src/**`; houdt het archief `docs/apps-script-calendar.js` buiten de push (anders dubbele declaraties).
 - `.gitignore`: `.clasp.json` en `.clasprc.json` (omgevingsspecifiek/geheim) + `.idea/` genegeerd.
 - `docs/clasp-deploy.md` toegevoegd: eenmalige setup, `push` vs `deploy`, verifiëren, productie-noot.
