@@ -8,19 +8,24 @@ _Laatst bijgewerkt: 2026-06-22_
 
 ## Componenten
 
-Huidige opstelling = **test-omgeving in Tonko's account** — volledig werkend en
-end-to-end getest (kalender, bezorgservice, werkrooster, Custom GPT).
-Volgende grote stap: productie-migratie naar Antje's account (zie onderaan).
+Draait nu **in productie in Antje's account**: Apps Script-project overgedragen
+aan Antje, deployment draait als Antje (`executeAs`), met toegang tot háár
+kalenders én sheets. Geverifieerd: today/week/werkrooster/bezorgingen + schrijven
+(kalender event, dienst, afwijking) tegen de nieuwe URL.
 
-### Google Calendar (Tonko's account, test)
-- `Taverne`, `MSPA`, `Jules Huiskamer` — door Tonko aangemaakt voor end-to-end test.
+### Google Calendar (Antje's account)
+- `Taverne`, `MSPA`, `Jules Huiskamer` — in Antje's account; script (als Antje)
+  heeft toegang (schrijftest op Taverne geslaagd).
+- Tonko's oude test-kalenders mogen opgeruimd worden.
 
-### Google Apps Script (REST tussenlaag, Tonko's account)
+### Google Apps Script (REST tussenlaag, Antje's account)
 - Code: `src/` (file-per-feature), gepusht met clasp — zie `docs/clasp-deploy.md`.
   `docs/apps-script-calendar.js` is alleen nog archief.
-- **Live** op de bestaande `/exec`-URL (deployment `AKfycbwdRn…`, @4). clasp wijst
-  naar het originele script (`scriptId 13TY851…` in `.clasp.json`, niet in git).
-- OpenAPI schema: `docs/openapi.yaml` v3.0.0
+- Project eigenaar = Antje; Tonko is editor (clasp-toegang behouden). `scriptId
+  13TY851…` in `.clasp.json` (niet in git).
+- **Live** op de nieuwe deployment (`AKfycbz81oYz…`), gemaakt door Antje →
+  `executeAs = Antje`. Oude deployment `AKfycbwdRn…` (draaide als Tonko) kan weg.
+- OpenAPI schema: `docs/openapi.yaml` (servers.url = de nieuwe `/exec`-URL)
 - Endpoints kalender: `GET ?action=today`, `GET ?action=week&date=...`, `POST` (create)
 - Endpoints bezorgservice: `GET ?action=bezorgingen&datum=...`, `POST action=afwijking`, `POST action=klant`
 - Auth: token in querystring/body (zie `BESLISSINGEN.md`)
@@ -28,9 +33,9 @@ Volgende grote stap: productie-migratie naar Antje's account (zie onderaan).
 ### Custom GPT
 - Prompt: `docs/chatgpt-prompt.md`
 - Spreekt Apps Script aan via OpenAPI schema (`docs/openapi.yaml`)
-- **Aangemaakt en gekoppeld in Tonko's ChatGPT (test); end-to-end getest:
-  lezen (today + werkrooster mét data) en schrijven (kalender event).**
-- Setup-stappen: `docs/custom-gpt-setup.md`.
+- Gekoppeld aan de nieuwe productie-URL en end-to-end getest (lezen + schrijven).
+- **Nog te doen**: als de GPT nog in Tonko's ChatGPT staat, een eigen GPT in
+  Antje's ChatGPT-account aanmaken (zelfde prompt + schema). Zie `docs/custom-gpt-setup.md`.
 - Token gaat via het schema (`default: JOUW_TOKEN` → vervangen door het echte
   token); Authentication = None.
 
@@ -70,6 +75,11 @@ Volgende grote stap: productie-migratie naar Antje's account (zie onderaan).
 - Werkrooster: wekelijkse print/export voor in de keuken nog bouwen.
 
 ## Productie-migratie naar Antje's account
+
+**Voortgang (grotendeels afgerond):** kalenders ✅, sheets ✅, Apps Script-project
+overgedragen ✅, deployment als Antje (`executeAs`) ✅, nieuwe URL in schema ✅.
+**Resterend:** Custom GPT in Antje's eigen ChatGPT (indien nog niet); oude
+deployment/test-kalenders opruimen; Tonko als editor laten staan voor beheer.
 
 Doel: alles draait in Antje's account; Tonko houdt editor-toegang voor beheer.
 De web app moet **als Antje** draaien (`executeAs`), zodat hij bij háár

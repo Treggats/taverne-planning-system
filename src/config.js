@@ -1,5 +1,4 @@
 const AUTH_TOKEN = 'ExclusiveMarriedArroganceAutopilotBlabberBadlandDaycareSlang';
-const URL = 'https://script.google.com/macros/s/AKfycbwdRnxoP1LtrWUF_jaXXO4Mhim9PqnqUR1QpZM1_1yQYVP00gOGv6JyVVCigSkYONlF/exec';
 
 const CALENDARS = {
   taverne: 'Taverne',

@@ -5,6 +5,10 @@ Eén regel per wijziging, formaat: `- YYYY-MM-DD — wat er veranderd is (welk b
 Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
+## 2026-06-22 (branch chore/productie-url-antje)
+- Productie-migratie grotendeels rond: Apps Script-project overgedragen aan Antje, nieuwe deployment door Antje (`executeAs = Antje`, `AKfycbz81oYz…`), GPT-action naar de nieuwe URL. Geverifieerd tegen de nieuwe URL: reads + schrijven (kalender event op Antje's Taverne, dienst, afwijking) werken.
+- `docs/openapi.yaml`: `servers.url` → nieuwe productie-`/exec`-URL. `src/config.js`: ongebruikte `URL`-constante (oude deployment) verwijderd. `STATUS.md` bijgewerkt naar productiestaat.
+
 ## 2026-06-22 (branch fix/timezone-times)
 - `src/utils-date.js` + `src/bezorgservice.js` + `src/werkrooster.js`: tijden tijdzone-robuust. `asTimeString(value, timeZone)` formatteert Date-cellen met de spreadsheet-tijdzone (`getSpreadsheetTimeZone()`) i.p.v. de script-tijdzone, zodat via de API geschreven tijden niet meer verschuiven. Gevonden via smoke test (10:00 → 18:00 op Antje's sheet). Live @7, geverifieerd (10:00 → 10:00). Zie `GOTCHAS.md`.
 
