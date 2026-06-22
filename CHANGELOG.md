@@ -5,6 +5,9 @@ Eén regel per wijziging, formaat: `- YYYY-MM-DD — wat er veranderd is (welk b
 Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
+## 2026-06-22 (branch docs/gpt-live)
+- Custom GPT aangemaakt en gekoppeld in Tonko's ChatGPT (test) en end-to-end gevalideerd: lezen (today + werkrooster mét data) en schrijven (kalender event) werken via de GPT. Daarmee is de volledige testketen (kalender, bezorgservice, werkrooster, GPT) werkend. `STATUS.md` bijgewerkt.
+
 ## 2026-06-22 (branch fix/openapi-url)
 - `docs/openapi.yaml`: server-URL ingevuld (echte `/exec`-basis) en path van `/` → `/exec`. De combinatie `/` gaf `.../exec/` (trailing slash) wat Apps Script afwijst ("Pagina niet gevonden").
 - `docs/openapi.yaml`: POST `oneOf`/discriminator (7 sub-schema's) vervangen door één plat `PostAction`-object met `action`-enum + alle velden optioneel. ChatGPT Actions weigert `oneOf` request bodies ("request body schema is not an object schema"). Server routeert/valideert al per `action`. Token-default op het ene PostAction-object (GET + POST = 2× `JOUW_TOKEN`).
