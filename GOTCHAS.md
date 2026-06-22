@@ -7,6 +7,21 @@ half uur kwijt bent geweest aan iets dat in retrospect logisch was.
 
 ---
 
+## `filePushOrder` hoort in `.clasp.json`, niet in `appsscript.json`
+_Vastgelegd: 2026-06-22_
+
+`clasp push` faalde met:
+`"appsscript.json" has errors: Invalid manifest: unknown fields: [filePushOrder]`.
+
+`filePushOrder` is een **clasp**-configveld (`.clasp.json`), geen veld van het
+GAS-manifest. Google valideert `appsscript.json` streng en weigert onbekende
+velden. Het stond hier per ongeluk in het manifest.
+
+**Opgelost door** `filePushOrder` te verwijderen: de laadvolgorde maakt voor
+deze code niet uit (alle `src/`-bestanden zijn puur `const`/`function`-
+declaraties; cross-file refs zitten in functie-bodies, dus pas op aanroep
+geëvalueerd). Is ordening ooit wél nodig, dan in `.clasp.json` zetten.
+
 ## ISO-weeklabel: weekjaar ≠ kalenderjaar rond de jaargrens
 _Vastgelegd: 2026-06-21_
 

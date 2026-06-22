@@ -38,8 +38,11 @@ clasp push          # upload src/ + appsscript.json naar het script
 
 Alleen `appsscript.json` en `src/**` worden gepusht; `.claspignore` houdt het
 archief (`docs/apps-script-calendar.js`), `build/`, `scripts/` en docs buiten de
-push. De laadvolgorde staat vast via `filePushOrder` in `appsscript.json`
-(config eerst, main als laatste).
+push. De laadvolgorde maakt niet uit: elk `src/`-bestand bevat alleen `const`-
+en `function`-declaraties, en alle cross-file verwijzingen staan in functie-
+bodies (uitgevoerd op aanroep, niet bij laden). Mocht ooit top-level code een
+constante uit een ander bestand nodig hebben, zet dan `filePushOrder` in
+`.clasp.json` (níet in `appsscript.json` — dat veld kent het manifest niet).
 
 ## Live zetten (web app URL bijwerken)
 
