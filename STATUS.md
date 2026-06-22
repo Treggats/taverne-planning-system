@@ -21,10 +21,14 @@ kalenders én sheets. Geverifieerd: today/week/werkrooster/bezorgingen + schrijv
 ### Google Apps Script (REST tussenlaag, Antje's account)
 - Code: `src/` (file-per-feature), gepusht met clasp — zie `docs/clasp-deploy.md`.
   `docs/apps-script-calendar.js` is alleen nog archief.
-- Project eigenaar = Antje; Tonko is editor (clasp-toegang behouden). `scriptId
-  13TY851…` in `.clasp.json` (niet in git).
-- **Live** op de nieuwe deployment (`AKfycbz81oYz…`), gemaakt door Antje →
-  `executeAs = Antje`. Oude deployment `AKfycbwdRn…` (draaide als Tonko) kan weg.
+- **Productie-project = `1TMjIVKp…`** (eigenaar Antje; Tonko editor). Dit was
+  ooit het per ongeluk door clasp aangemaakte project; Antje heeft dít
+  overgedragen gekregen en gedeployed. `.clasp.json` wijst hier nu naar.
+- **Live** deployment `AKfycbz81oYz…` (door Antje gemaakt → `executeAs = Antje`).
+  Antje heeft opnieuw uitgerold; geverifieerd dat de **actuele code live** is
+  (tijdzone-fix `10:00→10:00`, terugkerende afspraken, Antje's sheet-ID's).
+- Oud testproject `13TY851…` (Tonko) **definitief verwijderd** ✅; de oude
+  endpoint `AKfycbwdRn…` geeft nu HTTP 404. Eén project over: `1TMjIVKp`.
 - OpenAPI schema: `docs/openapi.yaml` (servers.url = de nieuwe `/exec`-URL)
 - Endpoints kalender: `GET ?action=today`, `GET ?action=week&date=...`, `POST` (create)
 - Endpoints bezorgservice: `GET ?action=bezorgingen&datum=...`, `POST action=afwijking`, `POST action=klant`
@@ -75,17 +79,17 @@ kalenders én sheets. Geverifieerd: today/week/werkrooster/bezorgingen + schrijv
 
 ## Productie-migratie naar Antje's account
 
-**Afgerond:** kalenders ✅, sheets ✅, Apps Script-project overgedragen ✅,
-deployment als Antje (`executeAs`) ✅, nieuwe URL in schema ✅, Custom GPT in
-Antje's eigen ChatGPT ✅. Het systeem draait in productie.
+**Afgerond:** kalenders ✅, sheets ✅, project overgedragen ✅, deployment als
+Antje ✅, GPT in Antje's ChatGPT ✅. Kanttekening: productie bleek in project
+`1TMjIVKp` te draaien met verouderde code (zie boven).
 
-**Resterend (klein):**
-- Oude deployment `AKfycbwdRn…` reageerde bij laatste check nog (lijkt niet écht
-  uitgeschakeld) — verifiëren/verwijderen, want hij draait als Tonko.
-- Tonko's oude test-kalenders opruimen.
-- Tonko als editor op het project laten staan (clasp-beheer).
-- Testrijen wissen: kalender-event 2026-09-01 "ZZ_TEST kalender" + afwijking
-  klant 216 / 2026-12-31.
+**Migratie afgerond ✅** — alles draait in productie in Antje's account:
+- Redeploy productie ✅ (actuele code geverifieerd live).
+- Oud testproject `13TY851` + endpoint `AKfycbwdRn…` definitief verwijderd ✅
+  (endpoint geeft 404). Test-kalenders + testdata al weg ✅.
+
+Aandachtspunt voor beheer: Tonko blijft editor op het productie-project
+(`1TMjIVKp`) voor clasp-deploys.
 
 Doel: alles draait in Antje's account; Tonko houdt editor-toegang voor beheer.
 De web app moet **als Antje** draaien (`executeAs`), zodat hij bij háár
