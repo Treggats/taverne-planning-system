@@ -5,6 +5,9 @@ Eén regel per wijziging, formaat: `- YYYY-MM-DD — wat er veranderd is (welk b
 Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
+## 2026-06-22 (branch docs/migratie-herzien)
+- `STATUS.md`: productie-migratie-checklist herzien naar de huidige realiteit (clasp i.p.v. "File → Make a copy", verplicht `webapp`-blok, `executeAs` = wie deployt, URL op 3 plekken, schema al GPT-compatibel, Engelse sheet-ID-namen).
+
 ## 2026-06-22 (branch docs/gpt-live)
 - Custom GPT aangemaakt en gekoppeld in Tonko's ChatGPT (test) en end-to-end gevalideerd: lezen (today + werkrooster mét data) en schrijven (kalender event) werken via de GPT. Daarmee is de volledige testketen (kalender, bezorgservice, werkrooster, GPT) werkend. `STATUS.md` bijgewerkt.
 

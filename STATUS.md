@@ -70,20 +70,49 @@ Volgende grote stap: productie-migratie naar Antje's account (zie onderaan).
 
 ## Productie-migratie naar Antje's account
 
-Te doen wanneer Antje klaar is om dit live te zetten:
+Doel: alles draait in Antje's account; Tonko houdt editor-toegang voor beheer.
+De web app moet **als Antje** draaien (`executeAs`), zodat hij bij háár
+kalenders en sheets kan — daarom maakt Antje (of: iemand ingelogd als Antje)
+de deployment aan. Tonko beheert de code via clasp.
 
-1. **Drie kalenders** in Antje's account aanmaken (`Taverne`, `MSPA`, `Jules Huiskamer`); per kalender delen met Tonko (`Make changes to events`).
-2. **Bezorgservice v2 sheet + Werkrooster sheet** eigenaarschap overdragen: Tonko → Share → Antje toevoegen → klik op haar rol → `Make owner`. Antje accepteert via mail. Sheet-IDs blijven hetzelfde.
-3. **Apps Script project** kopiëren naar Antje's account: Tonko deelt project met Antje (Editor) → Antje doet `File → Make a copy` → deelt kopie weer met Tonko (Editor).
-4. **Antje deployt** de kopie als web app (`Execute as: Me`, `Anyone`). Eerste run vraagt autorisatie voor Calendar + Sheets.
-5. **Nieuwe Web App URL** vervangen in `docs/openapi.yaml` en de Custom GPT action.
-6. **Custom GPT** aanmaken in Antje's ChatGPT account met de nieuwe URL, OpenAPI v3.0.0, prompt uit `chatgpt-prompt.md`. Antje deelt GPT-link met Tonko.
-7. **Opruimen Tonko's account**: oude Apps Script project en testkalenders mogen weg, of laten staan als sandbox.
+Volgorde:
+
+1. **Drie kalenders** in Antje's account aanmaken (`Taverne`, `MSPA`,
+   `Jules Huiskamer`); per kalender delen met Tonko (`Make changes to events`).
+2. **Sheets** (bezorgservice + werkrooster) eigenaarschap overdragen: Tonko →
+   Share → Antje → `Make owner`. Sheet-IDs blijven gelijk, dus
+   `DELIVERY_SHEET_ID` / `SCHEDULE_SHEET_ID` in `src/config.js` hoeven niet te
+   wijzigen.
+3. **Apps Script project** in Antje's account:
+   - Antje maakt een leeg Apps Script project en deelt het met Tonko (Editor).
+   - Tonko zet `.clasp.json` `scriptId` naar dat project en doet `clasp push`
+     (`src/` + `appsscript.json`, inclusief het `webapp`-blok).
+4. **Deployen als web app — in Antje's context** (zodat `executeAs` = Antje):
+   - Eerste keer het makkelijkst via de Apps Script-UI: `Deploy → New
+     deployment → Web app → Execute as: Me (Antje), Who has access: Anyone`.
+   - Antje keurt bij de eerste run de autorisatie voor Calendar + Sheets goed.
+   - Latere code-updates: `clasp push` door Tonko, daarna deze deployment
+     bijwerken (`clasp deploy -i <id>` of via de UI "New version").
+5. **Nieuwe Web App `/exec`-URL** overnemen op drie plekken:
+   - `src/config.js` (`URL`-constante),
+   - `docs/openapi.yaml` (`servers.url`),
+   - de Custom GPT-action (server-URL in het geplakte schema).
+6. **Custom GPT** in Antje's ChatGPT account: nieuwe GPT met prompt +
+   schema (zie `docs/custom-gpt-setup.md`), token vervangen, `Authentication:
+   None`. Antje deelt de GPT-link met Tonko.
+7. **Verifiëren** met `docs/smoke-tests.md`. Daarna het testproject + de
+   testkalenders in Tonko's account opruimen (of als sandbox houden).
 
 Aandachtspunten:
-- AUTH_TOKEN gelijk houden (of beide kanten bijwerken) zodat de GPT-action niet breekt.
-- BEZORGSERVICE_SHEET_ID blijft hetzelfde — overdracht verandert geen IDs.
-- Token nooit in chat zetten in productie; alleen in Apps Script-constante en GPT-action config.
+- **`webapp`-blok is verplicht** in `appsscript.json`, anders geeft de URL
+  "Pagina niet gevonden" (zie `GOTCHAS.md`).
+- **`clasp push` ≠ deploy** — na pushen altijd de deployment (her)deployen.
+- **`executeAs` = wie de deployment aanmaakt** — doe de deploy dus in Antje's
+  account, niet als Tonko.
+- Het schema is al GPT-compatibel (één `PostAction`-object, geen `oneOf`).
+- AUTH_TOKEN mag gelijk blijven; houd `src/config.js`, `openapi.yaml` en de
+  GPT-action consistent.
+- Token nooit in chat; alleen in `src/config.js` en de GPT-action-config.
 
 ## Bekende issues
 _(geen)_
