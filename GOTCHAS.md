@@ -7,6 +7,30 @@ half uur kwijt bent geweest aan iets dat in retrospect logisch was.
 
 ---
 
+## clasp deploy zonder `webapp`-blok sloopt een werkende web app
+_Vastgelegd: 2026-06-22_
+
+Een deployment die via de Apps Script-UI als web app was gemaakt (execute as
+me / anyone) werkte prima. Na `clasp deploy -i <id>` gaf diezelfde URL ineens
+HTML terug (`<title>Pagina niet gevonden</title>`) i.p.v. JSON — óók op
+bestaande actions als `today`.
+
+**Oorzaak:** bij een clasp-deploy neemt GAS de web-app-instellingen uit het
+manifest. Stond er geen `webapp`-blok in `appsscript.json`, dan verliest de
+nieuwe versie de toegang (geen entry point / niet publiek).
+
+**Opgelost** door dit aan `appsscript.json` toe te voegen en opnieuw te
+push'en + deployen:
+```json
+"webapp": {
+  "executeAs": "USER_DEPLOYING",
+  "access": "ANYONE_ANONYMOUS"
+}
+```
+`ANYONE_ANONYMOUS` = bereikbaar zonder Google-login (nodig voor de GPT-action).
+`USER_DEPLOYING` = draait als de eigenaar. Symptoom om op te letten: curl/GPT
+krijgt Drive-HTML "Pagina niet gevonden" terug i.p.v. JSON.
+
 ## `filePushOrder` hoort in `.clasp.json`, niet in `appsscript.json`
 _Vastgelegd: 2026-06-22_
 
