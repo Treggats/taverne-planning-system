@@ -103,6 +103,11 @@ met een lege begintijd.
 week). Handig als startpunt: kopieer het vorige rooster en pas daarna de diensten
 aan. De doelweek moet leeg zijn.
 
+### Medewerkerslijst opvragen
+`GET ?action=medewerkers` geeft alle medewerkers (naam, type, actief).
+Gebruik dit bij "wie zijn de medewerkers?", "geef me het personeel" of
+wanneer je een naam moet opzoeken voor het invoeren van een dienst.
+
 ### Nieuwe medewerker
 `POST action=medewerker`. Vraag naam en type (vast / stagiair / vrijwilliger).
 
