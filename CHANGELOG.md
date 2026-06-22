@@ -5,6 +5,11 @@ Eén regel per wijziging, formaat: `- YYYY-MM-DD — wat er veranderd is (welk b
 Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
+## 2026-06-22 (branch feat/recurring-events)
+- `src/calendar.js` + `src/config.js`: terugkerende afspraken in `handleCreate` via `createEventSeries`/`createAllDayEventSeries` + `buildRecurrence`. Velden `herhaling` (dagelijks/wekelijks/tweewekelijks/maandelijks) en `herhaling_tot`. `RECURRENCE_TYPES` toegevoegd.
+- `docs/openapi.yaml`: `herhaling`/`herhaling_tot` in `PostAction`; `x-openai-isConsequential: false` op GET en POST (geen bevestiging meer per schrijf-actie).
+- `docs/chatgpt-prompt.md`: instructies voor terugkerende afspraken (incl. "oneven weken" via tweewekelijks vanaf een oneven-week-datum).
+
 ## 2026-06-22 (branch docs/migratie-herzien)
 - `STATUS.md`: productie-migratie-checklist herzien naar de huidige realiteit (clasp i.p.v. "File → Make a copy", verplicht `webapp`-blok, `executeAs` = wie deployt, URL op 3 plekken, schema al GPT-compatibel, Engelse sheet-ID-namen).
 

@@ -33,6 +33,10 @@ function handleCreate(body) {
     return response({ error: `Kalender '${CALENDARS[body.kalender]}' niet gevonden` });
   }
 
+  if (body.herhaling && RECURRENCE_TYPES.indexOf(body.herhaling) === -1) {
+    return response({ error: `herhaling moet ${RECURRENCE_TYPES.join(', ')} zijn` });
+  }
+
   const [year, month, day] = body.datum.split('-').map(Number);
   const lunchValue = body.lunch === 'ja' ? 'A+B+fruit' : body.lunch;
 
@@ -44,9 +48,16 @@ function handleCreate(body) {
   if (body.notities) fields.push(`notities: ${body.notities}`);
 
   const description = fields.join('\n');
+  const recurrence = body.herhaling ? buildRecurrence(body.herhaling, body.herhaling_tot) : null;
+  const calendar = calendars[0];
 
   if (! body.begin) {
-    calendars[0].createAllDayEvent(body.naam, new Date(year, month - 1, day), { description });
+    const startDate = new Date(year, month - 1, day);
+    if (recurrence) {
+      calendar.createAllDayEventSeries(body.naam, startDate, recurrence, { description });
+    } else {
+      calendar.createAllDayEvent(body.naam, startDate, { description });
+    }
     return response({ success: true });
   }
 
@@ -61,12 +72,36 @@ function handleCreate(body) {
     endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
   }
 
-  calendars[0].createEvent(body.naam, startTime, endTime, {
-    description,
-    location: body.locatie ?? ''
-  });
+  const options = { description, location: body.locatie ?? '' };
+  if (recurrence) {
+    calendar.createEventSeries(body.naam, startTime, endTime, recurrence, options);
+  } else {
+    calendar.createEvent(body.naam, startTime, endTime, options);
+  }
 
   return response({ success: true });
+}
+
+function buildRecurrence(herhaling, totString) {
+  const recurrence = CalendarApp.newRecurrence();
+  let rule;
+
+  if (herhaling === 'dagelijks') {
+    rule = recurrence.addDailyRule();
+  } else if (herhaling === 'wekelijks') {
+    rule = recurrence.addWeeklyRule();
+  } else if (herhaling === 'tweewekelijks') {
+    rule = recurrence.addWeeklyRule().interval(2);
+  } else if (herhaling === 'maandelijks') {
+    rule = recurrence.addMonthlyRule();
+  }
+
+  if (totString) {
+    const [y, m, d] = String(totString).split('-').map(Number);
+    rule.until(new Date(y, m - 1, d));
+  }
+
+  return recurrence;
 }
 
 function getAllEvents(start, end) {

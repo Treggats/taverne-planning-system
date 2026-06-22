@@ -6,6 +6,19 @@ Format per beslissing: korte titel, datum, **Waarom**, eventueel **Alternatief o
 
 ---
 
+## Schrijf-acties niet als "consequential" gemarkeerd in de GPT-action
+_Vastgelegd: 2026-06-22_
+
+In `docs/openapi.yaml` staat `x-openai-isConsequential: false` op zowel GET als
+POST. Daardoor vraagt ChatGPT niet vóór elke schrijf-actie om bevestiging
+(standaard behandelt het POST als ingrijpend en vraagt het elke keer).
+
+**Waarom:** Antje is de vertrouwde eindgebruiker en nieuwe events aanmaken mag
+sowieso altijd (projectregel). De overige schrijf-acties zijn laag-risico: er
+worden geen calendar-events verwijderd; `dienst` met leeg begin verwijdert
+alleen een rij in onze eigen werkrooster-sheet. De herhaalde "weet je het
+zeker?"-pop-ups maakten de GPT onprettig in dagelijks gebruik.
+
 ## Werkrooster: snapshot per week, niet rooster + afwijkingen
 _Vastgelegd: 2026-06-21_
 
