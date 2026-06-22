@@ -5,6 +5,12 @@ Eén regel per wijziging, formaat: `- YYYY-MM-DD — wat er veranderd is (welk b
 Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
+## 2026-06-22 (branch chore/clasp-setup)
+- `.claspignore` toegevoegd: pusht alleen `appsscript.json` + `src/**`; houdt het archief `docs/apps-script-calendar.js` buiten de push (anders dubbele declaraties).
+- `.gitignore`: `.clasp.json` en `.clasprc.json` (omgevingsspecifiek/geheim) + `.idea/` genegeerd.
+- `docs/clasp-deploy.md` toegevoegd: eenmalige setup, `push` vs `deploy`, verifiëren, productie-noot.
+- `README.md`/`STATUS.md`: clasp-guide en `src/`-als-bron opgenomen, archief-verwijzing rechtgezet.
+
 ## 2026-06-21 (branch feat/werkrooster-beheer)
 - `src/werkrooster.js` toegevoegd: 9 functies (`handleWerkrooster`, `handleDienst`, `handleWeekKopieer`, `handleMedewerker`, `vindDienstRij`, `vindMedewerkerRij`, `normalizeWeek`, `isoWeekLabel`, `openWerkroosterSheet`).
 - `src/config.js`: `WERKROOSTER_SHEET_ID` en `MEDEWERKER_TYPES` toegevoegd.

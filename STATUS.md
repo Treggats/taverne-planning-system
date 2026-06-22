@@ -15,7 +15,8 @@ Productie-migratie naar Antje's account: zie onderaan.
 - `Taverne`, `MSPA`, `Jules Huiskamer` — door Tonko aangemaakt voor end-to-end test.
 
 ### Google Apps Script (REST tussenlaag, Tonko's account)
-- Code: `docs/apps-script-calendar.js`
+- Code: `src/` (file-per-feature), gepusht met clasp — zie `docs/clasp-deploy.md`.
+  `docs/apps-script-calendar.js` is alleen nog archief.
 - OpenAPI schema: `docs/openapi.yaml` v3.0.0
 - Endpoints kalender: `GET ?action=today`, `GET ?action=week&date=...`, `POST` (create)
 - Endpoints bezorgservice: `GET ?action=bezorgingen&datum=...`, `POST action=afwijking`, `POST action=klant`
@@ -58,7 +59,7 @@ Productie-migratie naar Antje's account: zie onderaan.
   via `Afwijkingen` opgelost door elke oneven week een annulering te zetten.
   Bij meer klanten met dit ritme: frequentie-veld toevoegen.
 - Eerste foutieve nieuwe sheet `Bezorgservice (nieuw)` (`1nPLI…`) moet weg.
-- Werkrooster: `src/` deployen (clasp push + redeploy) en end-to-end testen — live web app draait nog oude code.
+- `src/` deployen via clasp (`clasp push` + `clasp deploy -i`) en end-to-end testen — live web app draait nog oude code. Eerst eenmalige clasp-setup, zie `docs/clasp-deploy.md`.
 - Werkrooster: wekelijkse print/export voor in de keuken nog bouwen.
 
 ## Productie-migratie naar Antje's account

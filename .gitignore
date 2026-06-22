@@ -1,2 +1,9 @@
 *.zip
 *.plugin
+
+# clasp — omgevingsspecifiek / geheim, nooit committen
+.clasp.json
+.clasprc.json
+
+# JetBrains (PhpStorm)
+.idea/
