@@ -38,9 +38,9 @@ Volgende grote stap: productie-migratie naar Antje's account (zie onderaan).
 - Weekplanningen map: `1HNs0w_MOtTSbgI4XekNuZTnoIHvX9sK1` (eigenaar Antje)
 
 ### Bezorgservice
-- **v2 (rooster-gedreven, in gebruik)**: `1r5i_SUqkW1FnV2jlVcAMumQZVMJMUWWTul0Cxo_WPjI` (eigenaar Tonko)
+- **In gebruik (door Antje geüpload)**: `1jfc7e2tmv5FDzZMOVXSGMmu14TQ5wIGhg87hRq7FmJ8`. Bereikbaar voor het script en geverifieerd (GET bezorgingen).
 - Tabs: `Klanten` (rooster, porties, vast_toetje, bezorgwijze), `Afwijkingen`
-- **Oud (te decommissioneren)**: `19qx7Or__9pwEp6KtMjLmm7Hq1Nc0hM0Rghd5VV0U9Pc` (blijft staan tot v2 in productie)
+- **Oude testsheet (te decommissioneren)**: `1r5i_SUqkW1FnV2jlVcAMumQZVMJMUWWTul0Cxo_WPjI` (Tonko); allereerste sheet `19qx7Or__9pwEp6KtMjLmm7Hq1Nc0hM0Rghd5VV0U9Pc` ook.
 
 ### Werkrooster
 - Eigen sheet, **snapshot per week** (los van de weekplanningen).
@@ -52,9 +52,10 @@ Volgende grote stap: productie-migratie naar Antje's account (zie onderaan).
   - `scripts/build_werkrooster.py` → lege variant (blanco beginnen).
   - `build/werkrooster-week-2026-14.xlsx` → gevuld met week 14 als startpunt
     (gegenereerd uit de laatst bekende weekplanning; niet in git, zie `build/.gitignore`).
-- Sheet aangemaakt; `SCHEDULE_SHEET_ID` in `src/config.js` ingevuld
-  (`1Blxy4y…`). Daarna nooit meer uploaden; al het beheer gebeurt in de live
-  sheet via de GPT.
+- **In gebruik (door Antje geüpload)**: `1Cymrle7EpkrLZrvPlUP2Ktm4aE7zBuMDcxjuJlGdmH4`
+  in `src/config.js` (`SCHEDULE_SHEET_ID`). Bereikbaar voor het script en
+  geverifieerd (GET werkrooster week 2026-14). Oude testsheet `1Blxy4y…` kan weg.
+  Daarna nooit meer uploaden; al het beheer gebeurt in de live sheet via de GPT.
 - Export/print voor in de keuken: nog te doen (aparte vervolgstap).
 
 ## Openstaande punten
