@@ -1,0 +1,11 @@
+# clasp pusht alleen de bestanden die hieronder NIET genegeerd worden.
+# Negeer standaard alles...
+**/**
+
+# ...behalve het manifest en de Apps Script broncode in src/.
+!appsscript.json
+!src/**
+
+# Let op: docs/apps-script-calendar.js (archief) blijft hierdoor genegeerd.
+# Zou het wel mee-gepusht worden, dan ontstaan dubbele declaraties
+# (doGet, doPost, AUTH_TOKEN, ...) en faalt het script.

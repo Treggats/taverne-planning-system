@@ -45,6 +45,8 @@ Google Calendar (3 kalenders) + Google Sheets (bezorgservice, werkrooster)
 | `docs/openapi.yaml` | OpenAPI schema voor Custom GPT action |
 | `docs/chatgpt-prompt.md` | Systeemprompt voor het Custom GPT |
 | `docs/kalenders.md` | Volledige kalenderindeling met alle activiteiten |
+| `docs/clasp-deploy.md` | Hoe je `src/` met clasp pusht en deployt |
+| `docs/smoke-tests.md` | GPT-prompts om alle endpoints te verifiëren |
 | `scripts/build_bezorgservice.py` | Genereert de bezorgservice sheet |
 | `scripts/build_werkrooster.py` | Genereert de werkrooster sheet |
 
