@@ -13,3 +13,4 @@ const WEEKDAYS = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
 const EXCEPTION_TYPES = ['annulering', 'wijziging', 'extra'];
 const DELIVERY_METHODS = ['bezorgen', 'ophalen', 'ter_plaatse'];
 const EMPLOYEE_TYPES = ['vast', 'stagiair', 'vrijwilliger'];
+const RECURRENCE_TYPES = ['dagelijks', 'wekelijks', 'tweewekelijks', 'maandelijks'];

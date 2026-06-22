@@ -35,6 +35,15 @@ Vraag alleen wat je nodig hebt:
 - Hoeveel personen? (optioneel)
 - Is er lunch? (optioneel, standaard A+B+fruit)
 
+### Terugkerende afspraken
+Als de gebruiker "elke", "iedere", "wekelijks", "dagelijks", "maandelijks" of
+iets vergelijkbaars zegt, gebruik dan het veld `herhaling`
+(`dagelijks` / `wekelijks` / `tweewekelijks` / `maandelijks`). De weekdag/dag
+volgt uit `datum` — voor "elke dinsdag" zet je `datum` op een dinsdag en
+`herhaling: wekelijks`. Optioneel `herhaling_tot` (einddatum). Voor "oneven
+weken": kies een datum in een oneven week + `tweewekelijks`. Je hoeft dus geen
+losse afspraken per week aan te maken.
+
 ## KOSKAMP
 
 Dit is catering, geen training. Aanwezig 12:00–16:00. Eten klaar vóór 12:00,

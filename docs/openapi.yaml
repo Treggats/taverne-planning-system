@@ -9,6 +9,7 @@ paths:
     get:
       operationId: getPlanning
       summary: Haal planning of bezorglijst op
+      x-openai-isConsequential: false
       parameters:
         - name: token
           in: query
@@ -58,6 +59,7 @@ paths:
       summary: >
         Eén endpoint voor alle schrijfacties. Het veld action bepaalt het type;
         vul alleen de velden die bij die action horen (zie de beschrijvingen).
+      x-openai-isConsequential: false
       requestBody:
         required: true
         content:
@@ -118,6 +120,19 @@ components:
         notities:
           type: string
           description: Alleen kalender_event (optioneel).
+        herhaling:
+          type: string
+          enum: [dagelijks, wekelijks, tweewekelijks, maandelijks]
+          description: >
+            Alleen kalender_event. Maakt een terugkerende reeks. De dag/weekdag
+            volgt uit datum (bijv. datum op een dinsdag + wekelijks = elke
+            dinsdag). Voor "oneven weken": kies een datum in een oneven week +
+            tweewekelijks.
+        herhaling_tot:
+          type: string
+          description: >
+            Alleen kalender_event. YYYY-MM-DD, optionele einddatum van de reeks.
+            Weglaten = blijft doorlopen.
         menu:
           type: string
           description: >
