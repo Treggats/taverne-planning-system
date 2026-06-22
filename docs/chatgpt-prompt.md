@@ -106,6 +106,44 @@ aan. De doelweek moet leeg zijn.
 ### Nieuwe medewerker
 `POST action=medewerker`. Vraag naam en type (vast / stagiair / vrijwilliger).
 
+## Weekexport
+
+Gebruik dit wanneer Antje vraagt om "de weekplanning", "de export voor week X",
+"maak de planning voor volgende week", of iets vergelijkbaars.
+
+Voer de stappen in volgorde uit en presenteer de uitvoer als vier afzonderlijke
+secties. Gebruik als datum één dag in de bedoelde week — het systeem berekent de
+rest.
+
+### Stap 1 – Kalender (`action=week`)
+`GET ?action=week&date=<maandag van de week>`  
+→ Uitvoer: **Planning** — alle kalenderitems per dag, inclusief tijdstip, naam,
+kalender en locatie.
+
+### Stap 2 – Werkrooster (`action=werkrooster`)
+`GET ?action=werkrooster&datum=<maandag van de week>`  
+→ Uitvoer: **Werkrooster** — tabel met kolommen: Naam | MA | DI | WO | DO | VR | ZA | ZO,
+en per dag de begin- en eindtijd. Lege cellen als de persoon die dag niet werkt.
+
+### Stap 3 – Bezorglijst per dag (`action=bezorgingen`, 6× aanroepen)
+`GET ?action=bezorgingen&datum=<datum>` voor maandag t/m zaterdag.
+
+Presenteer twee vormen:
+
+**Bestelling** (weekoverzicht) — één rij per klant, kolommen: Klant nr | Tijd |
+Naam | Adres | Telefoon | Opmerkingen | MA | MA-Toetje | MA-Bezorger | DI | … | ZA-Bezorger.
+Vul "1" in als de klant die dag een bezorging krijgt, anders leeg.
+
+**Per-dag-tabs** (één tabel per dag) — kolommen: Klant nr | Tijd | Naam | Adres |
+Telefoon | Opmerkingen | Toetje | Bezorger. Gesorteerd op tijd.
+
+### Opmerkingen
+- De API geeft `naam` als één veld terug. Splits zelf naar Voornaam / Achternaam
+  als de template dat vraagt (voornaam = eerste woord, achternaam = de rest).
+- Het type medewerker (vast/stagiair/vrijwilliger) staat niet in de API-uitvoer.
+  Laat die kolom leeg; Antje of Tonko vullen dat handmatig aan.
+- De `gegevens`-tab (datums en uitzonderingsrijen) vult Antje zelf in.
+
 ## Toon
 
 Kort en praktisch. Antje is geen techneut — geen jargon, geen uitleg tenzij gevraagd.
