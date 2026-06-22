@@ -25,9 +25,14 @@ function toDate(v) {
   return parseDate(v);
 }
 
-function asTimeString(v) {
+// Formatteert een tijd-waarde naar HH:mm. Tekstwaarden komen onveranderd terug.
+// Voor Date-waarden (cellen die Sheets als tijd heeft getypeerd) MOET de
+// tijdzone van de sheet zelf worden gebruikt, niet die van het script — anders
+// schuift de tijd als beide tijdzones verschillen. Geef daarom altijd de
+// spreadsheet-tijdzone mee (getSpreadsheetTimeZone()).
+function asTimeString(v, timeZone) {
   if (v instanceof Date) {
-    return Utilities.formatDate(v, Session.getScriptTimeZone(), 'HH:mm');
+    return Utilities.formatDate(v, timeZone || Session.getScriptTimeZone(), 'HH:mm');
   }
   return String(v ?? '');
 }
