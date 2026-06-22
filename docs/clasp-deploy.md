@@ -57,6 +57,14 @@ clasp deploy -i <deploymentId> -d "korte omschrijving"
 Een `clasp deploy` zónder `-i` maakt een **nieuwe** deployment met een **nieuwe
 URL** — dat breekt de bestaande GPT-action. Gebruik dus altijd `-i`.
 
+> **Het `webapp`-blok is verplicht.** Bij een clasp-deploy haalt GAS de
+> web-app-instellingen uit `appsscript.json`. Ontbreekt het blok, dan verliest
+> de deployment zijn toegang en geeft de URL HTML ("Pagina niet gevonden")
+> i.p.v. JSON. Het manifest bevat daarom:
+> ```json
+> "webapp": { "executeAs": "USER_DEPLOYING", "access": "ANYONE_ANONYMOUS" }
+> ```
+
 ## Verifiëren
 
 ```bash
