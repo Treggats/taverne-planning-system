@@ -120,6 +120,12 @@ wanneer je een naam moet opzoeken voor het invoeren van een dienst.
 ### Nieuwe medewerker
 `POST action=medewerker`. Vraag naam en type (vast / stagiair / vrijwilliger).
 
+Een medewerker inactiveren: stuur `actief=nee` mee. Vraag altijd bevestiging
+vóór inactiveren ("Weet je zeker dat je [naam] wil inactiveren?").
+
+Bij het inplannen van diensten: stel altijd voor uit `GET ?action=medewerkers`
+en filter op `actief: ja`. Inactieve medewerkers nooit suggereren.
+
 ## Weekexport
 
 Gebruik dit wanneer Antje vraagt om "de weekplanning", "de export voor week X",

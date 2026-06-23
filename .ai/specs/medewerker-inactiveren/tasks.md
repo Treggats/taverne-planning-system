@@ -1,6 +1,6 @@
 # Tasks
 
-- [ ] 1. Breid de subsectie "Nieuwe medewerker" in `docs/chatgpt-prompt.md` uit:
+- [x] 1. Breid de subsectie "Nieuwe medewerker" in `docs/chatgpt-prompt.md` uit:
          - Leg uit dat `actief=nee` een medewerker inactiveert
          - Voeg instructie toe: vraag altijd bevestiging vóór inactiveren
          - Voeg instructie toe: suggereer alleen actieve medewerkers bij plannen
