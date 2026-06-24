@@ -6,7 +6,7 @@
 - `src/main.js` — routing: `if (action === 'klant_status') return handleClientStatus(body)`
 - `docs/openapi.yaml` — nieuw POST-schema `KlantStatus` met `klant_id` en `actief`
 - `docs/chatgpt-prompt.md` — subsectie toevoegen aan `## Bezorgservice`; GPT vraagt
-  altijd bevestiging vóór inactiveren ("Weet je zeker dat je [naam] wil inactiveren?")
+  altijd bevestiging vóór deactiveren ("Weet je zeker dat je [naam] wil deactiveren?")
 
 ## Expliciete afbakening
 - Raakt niet aan `handleClient` (die blijft alleen voor nieuwe klanten)
