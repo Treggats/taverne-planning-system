@@ -34,6 +34,40 @@ function handleListClients() {
   return response({ klanten: clients });
 }
 
+function findClientRow(sheet, headers, klantId) {
+  const values = sheet.getDataRange().getValues();
+  const k = headers.indexOf('klant_id');
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][k]).trim() === String(klantId).trim()) {
+      return i + 1;
+    }
+  }
+  return -1;
+}
+
+function handleClientStatus(body) {
+  if (! body.klant_id) {
+    return response({ error: 'Missing field: klant_id' });
+  }
+
+  if (! body.actief || ['ja', 'nee'].indexOf(body.actief) === -1) {
+    return response({ error: 'actief moet ja of nee zijn' });
+  }
+
+  const sheet = openDeliverySheet().getSheetByName('Klanten');
+  const headers = readHeaders(sheet);
+  const rowIndex = findClientRow(sheet, headers, body.klant_id);
+
+  if (rowIndex === -1) {
+    return response({ error: `Klant ${body.klant_id} niet gevonden` });
+  }
+
+  const col = headers.indexOf('actief') + 1;
+  sheet.getRange(rowIndex, col).setValue(body.actief);
+
+  return response({ success: true, klant_id: body.klant_id, actief: body.actief });
+}
+
 function handleDeliveries(dateString) {
   if (! dateString) {
     return response({ error: 'Missing datum parameter (YYYY-MM-DD)' });

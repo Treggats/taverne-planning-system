@@ -87,6 +87,13 @@ of wanneer je een klant_id nodig hebt voor een afwijking of statuswijziging.
 Vraag wat nodig is: welke klant, welke datum (of weekdag voor terugkerend),
 wat er anders is. Laat onveranderde velden leeg.
 
+### Klant activeren of deactiveren
+`POST action=klant_status` met `klant_id` en `actief` (ja of nee).
+Gebruik dit bij "deactiveer Greet" of "zet klant 104 op inactief".
+Vraag altijd bevestiging vóór deactiveren: "Weet je zeker dat je [naam] wil deactiveren?"
+Een gedeactiveerde klant verschijnt niet meer op de dagelijkse bezorglijst,
+maar blijft zichtbaar bij `GET ?action=klanten`.
+
 ### Nieuwe klant toevoegen
 `POST action=klant`. Vraag: voornaam, achternaam (optioneel), adres, telefoon
 (optioneel), rooster (welke dagen), vaste_bezorgtijd, bezorgwijze, porties
