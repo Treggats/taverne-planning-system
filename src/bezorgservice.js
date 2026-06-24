@@ -15,13 +15,15 @@ function nextClientId(sheet, headers) {
 function handleListClients() {
   const clients = readRows(openDeliverySheet(), 'Klanten')
     .map(c => ({
-      klant_id:         c.klant_id,
-      voornaam:         String(c.voornaam ?? '').trim(),
-      achternaam:       String(c.achternaam ?? '').trim(),
-      rooster:          String(c.rooster ?? '').trim(),
-      vaste_bezorgtijd: String(c.vaste_bezorgtijd ?? '').trim(),
-      bezorgwijze:      String(c.bezorgwijze ?? '').trim(),
-      actief:           String(c.actief ?? '').trim(),
+      klant_id:           c.klant_id,
+      voornaam:           String(c.voornaam ?? '').trim(),
+      achternaam:         String(c.achternaam ?? '').trim(),
+      rooster:            String(c.rooster ?? '').trim(),
+      vaste_bezorgtijd:   String(c.vaste_bezorgtijd ?? '').trim(),
+      bezorgwijze:        String(c.bezorgwijze ?? '').trim(),
+      actief:             String(c.actief ?? '').trim(),
+      dieetwensen:        String(c.dieetwensen ?? '').trim(),
+      bezorg_opmerkingen: String(c.bezorg_opmerkingen ?? '').trim(),
     }))
     .filter(c => c.voornaam !== '');
 
