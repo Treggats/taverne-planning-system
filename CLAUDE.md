@@ -4,6 +4,11 @@ Planningssysteem voor Antje's Taverne / Jules huiskamer in Assen.
 Eindgebruiker: Antje Dijkstra (antjec.dijkstra@gmail.com).
 Beheerder: Tonko Mulder (tonko.mulder@gmail.com).
 
+## Werkwijze
+Voer geen taken uit tenzij expliciet gevraagd. Stel voor, implementeer niet.
+Ruim planbestanden op na een sessie zodat ze niet als impliciete taakopdracht
+worden opgepikt bij de volgende sessie.
+
 ## Toestemmingsregel
 Nieuwe calendar events aanmaken mag altijd. Bestaande events nooit aanpassen
 of verwijderen zonder expliciete toestemming van Antje of Tonko.
