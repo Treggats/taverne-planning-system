@@ -69,6 +69,10 @@ function doPost(e) {
     return handleWeekCopy(body);
   }
 
+  if (action === 'week_wissen') {
+    return handleWeekClear(body);
+  }
+
   if (action === 'medewerker') {
     return handleEmployee(body);
   }
