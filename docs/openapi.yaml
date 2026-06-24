@@ -22,14 +22,15 @@ paths:
           required: true
           schema:
             type: string
-            enum: [today, week, bezorgingen, werkrooster, medewerkers, menu]
+            enum: [today, week, bezorgingen, werkrooster, medewerkers, menu, klanten]
             description: >
               today = vandaag's kalender entries,
               week = kalender week (verplicht: date),
               bezorgingen = bezorglijst voor één dag (verplicht: datum),
               werkrooster = personeelsrooster voor één week (week of datum),
               medewerkers = lijst van alle medewerkers (naam, type, actief),
-              menu = menu voor één dag (verplicht: datum).
+              menu = menu voor één dag (verplicht: datum),
+              klanten = lijst van alle bezorgklanten.
         - name: date
           in: query
           required: false

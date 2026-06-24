@@ -25,6 +25,10 @@ function doGet(e) {
     return handleListEmployees();
   }
 
+  if (action === 'klanten') {
+    return handleListClients();
+  }
+
   if (action === 'menu') {
     return handleGetMenu(e.parameter.datum);
   }

@@ -12,6 +12,26 @@ function nextClientId(sheet, headers) {
   return real.length ? Math.max.apply(null, real) + 1 : 100;
 }
 
+function handleListClients() {
+  const clients = readRows(openDeliverySheet(), 'Klanten')
+    .map(c => ({
+      klant_id:         c.klant_id,
+      voornaam:         String(c.voornaam ?? '').trim(),
+      achternaam:       String(c.achternaam ?? '').trim(),
+      rooster:          String(c.rooster ?? '').trim(),
+      vaste_bezorgtijd: String(c.vaste_bezorgtijd ?? '').trim(),
+      bezorgwijze:      String(c.bezorgwijze ?? '').trim(),
+      actief:           String(c.actief ?? '').trim(),
+    }))
+    .filter(c => c.voornaam !== '');
+
+  clients.sort((a, b) =>
+    a.achternaam.localeCompare(b.achternaam) || a.voornaam.localeCompare(b.voornaam)
+  );
+
+  return response({ klanten: clients });
+}
+
 function handleDeliveries(dateString) {
   if (! dateString) {
     return response({ error: 'Missing datum parameter (YYYY-MM-DD)' });
