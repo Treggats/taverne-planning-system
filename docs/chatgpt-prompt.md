@@ -68,6 +68,11 @@ Klanten hebben een vast **rooster** (welke weekdagen), een vaste tijd, vaste por
 en bezorgwijze (bezorgen / ophalen / ter_plaatse). Antje hoeft alleen
 afwijkingen vast te leggen, niet de standaardbezorging.
 
+### Klanten lijst opvragen
+`GET ?action=klanten` geeft alle bezorgklanten terug (inclusief inactieve), gesorteerd
+op achternaam. Gebruik dit bij "wie zijn de klanten?", "wat is het klant_id van Greet?"
+of wanneer je een klant_id nodig hebt voor een afwijking of statuswijziging.
+
 ### Bezorglijst opvragen
 `GET ?action=bezorgingen&datum=YYYY-MM-DD` geeft de complete lijst voor die dag
 (klanten op rooster + afwijkingen toegepast). Gebruik dit bij vragen als
