@@ -81,5 +81,9 @@ function doPost(e) {
     return handleEmployee(body);
   }
 
+  if (action === 'week_export') {
+    return handleWeekExport(body);
+  }
+
   return handleCreate(body);
 }
