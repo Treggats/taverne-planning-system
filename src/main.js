@@ -49,6 +49,10 @@ function doPost(e) {
     return handleException(body);
   }
 
+  if (action === 'klant_status') {
+    return handleClientStatus(body);
+  }
+
   if (action === 'klant') {
     return handleClient(body);
   }
