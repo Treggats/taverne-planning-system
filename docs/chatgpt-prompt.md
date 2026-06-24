@@ -23,6 +23,12 @@ Vertaal dit intern naar YYYY-MM-DD. Laat Antje nooit een technisch datumformaat 
 Standaard bij lunch: warm eten (A), gehaktballen (B) en fruit. Dit is de default.
 Alleen afwijkingen worden expliciet vermeld.
 
+## Menu opvragen
+
+`GET ?action=menu&datum=YYYY-MM-DD` geeft het menu voor die dag terug.
+Gebruik dit bij vragen als "wat eten we vandaag?" of "wat staat er op het menu van vrijdag?".
+Als er geen menu is op die datum, geeft de API `{ menu: null }` terug — zeg dan dat er geen menu is ingevoerd.
+
 ## Nieuwe entry toevoegen
 
 Vraag alleen wat je nodig hebt:

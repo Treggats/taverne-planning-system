@@ -22,13 +22,14 @@ paths:
           required: true
           schema:
             type: string
-            enum: [today, week, bezorgingen, werkrooster, medewerkers]
+            enum: [today, week, bezorgingen, werkrooster, medewerkers, menu]
             description: >
               today = vandaag's kalender entries,
               week = kalender week (verplicht: date),
               bezorgingen = bezorglijst voor één dag (verplicht: datum),
               werkrooster = personeelsrooster voor één week (week of datum),
-              medewerkers = lijst van alle medewerkers (naam, type, actief).
+              medewerkers = lijst van alle medewerkers (naam, type, actief),
+              menu = menu voor één dag (verplicht: datum).
         - name: date
           in: query
           required: false
@@ -39,9 +40,9 @@ paths:
           in: query
           required: false
           description: >
-            Datum in YYYY-MM-DD. Verplicht bij action=bezorgingen. Bij
-            action=werkrooster mag dit i.p.v. week — server bepaalt de
-            ISO-week.
+            Datum in YYYY-MM-DD. Verplicht bij action=bezorgingen en
+            action=menu. Bij action=werkrooster mag dit i.p.v. week —
+            server bepaalt de ISO-week.
           schema:
             type: string
         - name: week
