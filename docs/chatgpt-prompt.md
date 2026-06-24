@@ -125,6 +125,12 @@ welke dag, begin- en eindtijd. Bestaat de dienst al, dan wordt hij overschreven.
 Een dienst verwijderen ("Iris werkt donderdag toch niet"): stuur dezelfde dienst
 met een lege begintijd.
 
+### Week leegmaken
+`POST action=week_wissen` met `week` (YYYY-WW) of `datum` (een dag in de week).
+Verwijdert alle diensten van die week. Geeft `{ gewist: N }` terug.
+Vraag altijd bevestiging: "Weet je zeker dat je het rooster van week X wil wissen?"
+Gebruik dit als voorbereiding vóór `week_kopieer` (doelweek moet leeg zijn).
+
 ### Kopieer vorige week
 `POST action=week_kopieer` met `van_datum` (vorige week) en `naar_datum` (nieuwe
 week). Handig als startpunt: kopieer het vorige rooster en pas daarna de diensten

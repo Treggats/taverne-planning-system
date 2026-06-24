@@ -116,6 +116,31 @@ function handleWeekCopy(body) {
   return response({ success: true, copied: rows.length, van: from, naar: to });
 }
 
+function handleWeekClear(body) {
+  const weekLabel = normalizeWeek(body.week, body.datum);
+  if (! weekLabel) {
+    return response({ error: 'week (YYYY-WW) of datum (YYYY-MM-DD) verplicht' });
+  }
+
+  const sheet = openScheduleSheet().getSheetByName('Diensten');
+  const values = sheet.getDataRange().getValues();
+  const headers = values[0];
+  const w = headers.indexOf('week');
+
+  const rowIndices = [];
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][w]).trim() === weekLabel) {
+      rowIndices.push(i + 1);
+    }
+  }
+
+  for (let i = rowIndices.length - 1; i >= 0; i--) {
+    sheet.deleteRow(rowIndices[i]);
+  }
+
+  return response({ success: true, gewist: rowIndices.length, week: weekLabel });
+}
+
 function handleEmployee(body) {
   if (! body.naam) {
     return response({ error: 'Missing field: naam' });
