@@ -26,11 +26,11 @@ paths:
             description: >
               today = vandaag's kalender entries,
               week = kalender week (verplicht: date),
-              bezorgingen = bezorglijst voor één dag (verplicht: datum),
-              werkrooster = personeelsrooster voor één week (week of datum),
-              medewerkers = lijst van alle medewerkers (naam, type, actief),
-              menu = menu voor één dag (verplicht: datum),
-              klanten = lijst van alle bezorgklanten.
+              bezorgingen = bezorglijst voor één dag (verplicht: datum) — bv. "wie krijgt vandaag wat?", "bezorglijst van vrijdag",
+              werkrooster = personeelsrooster voor één week (week of datum) — bv. "wie werkt er woensdag?", "rooster van volgende week",
+              medewerkers = lijst van alle medewerkers (naam, type, actief) — bv. "wie zijn de medewerkers?",
+              menu = menu voor één dag (verplicht: datum) — bv. "wat eten we vandaag?",
+              klanten = lijst van alle bezorgklanten — bv. "wie zijn de klanten?", "klant_id van Greet", "heeft Kor dieetwensen?".
         - name: date
           in: query
           required: false
@@ -85,17 +85,20 @@ components:
           type: string
           enum: [kalender_event, menu, afwijking, afwijking_verwijderen, klant, klant_status, dienst, week_kopieer, week_wissen, medewerker, week_export]
           description: >
-            kalender_event = nieuw kalender event;
-            menu = menu als all-day event;
-            afwijking = bezorgafwijking toevoegen;
-            afwijking_verwijderen = afwijking verwijderen op datum (verplicht: klant_id, datum);
-            klant = nieuwe bezorgklant;
-            klant_status = klant activeren of deactiveren (verplicht: klant_id, actief);
-            dienst = werkdienst toevoegen/wijzigen/verwijderen;
-            week_kopieer = werkrooster van een week kopiëren;
-            week_wissen = alle diensten van een week verwijderen (verplicht: week of datum);
-            medewerker = medewerker toevoegen/bijwerken;
-            week_export = weekplanning exporteren naar Google Sheets (verplicht: week of datum).
+            kalender_event = nieuw kalender event toevoegen;
+            menu = menu als all-day event opslaan;
+            afwijking = bezorgafwijking toevoegen —
+              annulering bv. "Greet komt morgen niet" / "Kor hoeft vrijdag niets",
+              wijziging bv. "Marga vandaag om 19:00 ipv 18:00",
+              extra bv. "doe Kor er morgen ook bij";
+            afwijking_verwijderen = afwijking verwijderen (verplicht: klant_id, datum) — bv. "verwijder de annulering van Greet op vrijdag", "die wijziging van Kor hoeft niet meer";
+            klant = nieuwe bezorgklant toevoegen;
+            klant_status = klant activeren of deactiveren (verplicht: klant_id, actief) — bv. "deactiveer Greet", "zet Marga op inactief", "activeer klant 104";
+            dienst = werkdienst toevoegen, wijzigen of verwijderen;
+            week_kopieer = werkrooster van een week kopiëren naar een andere week;
+            week_wissen = alle diensten van een week verwijderen (verplicht: week of datum) — bv. "maak het rooster van volgende week leeg";
+            medewerker = medewerker toevoegen of bijwerken;
+            week_export = weekplanning exporteren naar Google Sheets (verplicht: week of datum) — bv. "exporteer de weekplanning", "maak de planning voor volgende week".
         kalender:
           type: string
           enum: [taverne, mspa, jules]
