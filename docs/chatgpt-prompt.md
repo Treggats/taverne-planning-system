@@ -70,8 +70,10 @@ afwijkingen vast te leggen, niet de standaardbezorging.
 
 ### Klanten lijst opvragen
 `GET ?action=klanten` geeft alle bezorgklanten terug (inclusief inactieve), gesorteerd
-op achternaam. Gebruik dit bij "wie zijn de klanten?", "wat is het klant_id van Greet?"
-of wanneer je een klant_id nodig hebt voor een afwijking of statuswijziging.
+op achternaam. Elk klant-object bevat: `klant_id`, `voornaam`, `achternaam`, `rooster`,
+`vaste_bezorgtijd`, `bezorgwijze`, `actief`, `dieetwensen`, `bezorg_opmerkingen`.
+Gebruik dit bij "wie zijn de klanten?", "wat is het klant_id van Greet?",
+"heeft Kor dieetwensen?" of "zijn er opmerkingen voor de bezorger van Marga?".
 
 ### Bezorglijst opvragen
 `GET ?action=bezorgingen&datum=YYYY-MM-DD` geeft de complete lijst voor die dag
