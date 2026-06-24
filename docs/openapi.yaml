@@ -83,11 +83,12 @@ components:
           default: JOUW_TOKEN
         action:
           type: string
-          enum: [kalender_event, menu, afwijking, klant, klant_status, dienst, week_kopieer, week_wissen, medewerker]
+          enum: [kalender_event, menu, afwijking, afwijking_verwijderen, klant, klant_status, dienst, week_kopieer, week_wissen, medewerker]
           description: >
             kalender_event = nieuw kalender event;
             menu = menu als all-day event;
-            afwijking = bezorgafwijking;
+            afwijking = bezorgafwijking toevoegen;
+            afwijking_verwijderen = afwijking verwijderen op datum (verplicht: klant_id, datum);
             klant = nieuwe bezorgklant;
             klant_status = klant activeren of deactiveren (verplicht: klant_id, actief);
             dienst = werkdienst toevoegen/wijzigen/verwijderen;

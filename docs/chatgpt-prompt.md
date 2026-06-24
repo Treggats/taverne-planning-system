@@ -94,6 +94,13 @@ Vraag altijd bevestiging vóór deactiveren: "Weet je zeker dat je [naam] wil de
 Een gedeactiveerde klant verschijnt niet meer op de dagelijkse bezorglijst,
 maar blijft zichtbaar bij `GET ?action=klanten`.
 
+### Afwijking verwijderen
+`POST action=afwijking_verwijderen` met `klant_id` en `datum` (YYYY-MM-DD).
+Gebruik dit bij "verwijder de annulering van Greet op vrijdag" of
+"die wijziging van Kor van volgende week hoeft niet meer".
+Vraag altijd bevestiging vóór verwijderen.
+Als er geen afwijking was op die datum, geeft de API `{ deleted: false }` — geen fout.
+
 ### Nieuwe klant toevoegen
 `POST action=klant`. Vraag: voornaam, achternaam (optioneel), adres, telefoon
 (optioneel), rooster (welke dagen), vaste_bezorgtijd, bezorgwijze, porties

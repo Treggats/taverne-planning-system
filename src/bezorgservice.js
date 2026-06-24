@@ -193,6 +193,36 @@ function handleClient(body) {
   return response({ success: true, klant_id: body.klant_id });
 }
 
+function handleDeleteException(body) {
+  if (! body.klant_id) {
+    return response({ error: 'Missing field: klant_id' });
+  }
+
+  if (! body.datum) {
+    return response({ error: 'Missing field: datum' });
+  }
+
+  const target = parseDate(body.datum);
+  const sheet = openDeliverySheet().getSheetByName('Afwijkingen');
+  const values = sheet.getDataRange().getValues();
+  const headers = values[0];
+  const k = headers.indexOf('klant_id');
+  const d = headers.indexOf('datum');
+
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][k]).trim() !== String(body.klant_id).trim()) continue;
+    const cellDate = toDate(values[i][d]);
+    if (cellDate.getFullYear() === target.getFullYear() &&
+        cellDate.getMonth() === target.getMonth() &&
+        cellDate.getDate() === target.getDate()) {
+      sheet.deleteRow(i + 1);
+      return response({ success: true, deleted: true });
+    }
+  }
+
+  return response({ success: true, deleted: false });
+}
+
 function exceptionAppliesOn(exception, date, weekday) {
   if (exception.datum) {
     const d = toDate(exception.datum);

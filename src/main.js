@@ -49,6 +49,10 @@ function doPost(e) {
     return handleException(body);
   }
 
+  if (action === 'afwijking_verwijderen') {
+    return handleDeleteException(body);
+  }
+
   if (action === 'klant_status') {
     return handleClientStatus(body);
   }
