@@ -37,12 +37,17 @@ Apps Script schrijft `lunch: ja` automatisch om naar `lunch: A+B+fruit`.
 Map Weekplanningen ID: `1HNs0w_MOtTSbgI4XekNuZTnoIHvX9sK1`
 
 ## Bezorgservice
-Sheet ID: `19qx7Or__9pwEp6KtMjLmm7Hq1Nc0hM0Rghd5VV0U9Pc`
+Sheet ID: `1jfc7e2tmv5FDzZMOVXSGMmu14TQ5wIGhg87hRq7FmJ8`
 Tabs: Klanten | Bezorgingen
 Schema Klanten: klant_id, voornaam, achternaam, adres, telefoon,
   vaste_bezorgtijd, bezorg_opmerkingen, dieetwensen, actief
 Tijdelijke IDs 9001–9006 vervangen door echte nummers via Antje.
 
+## Werkrooster
+Sheet ID: `1Cymrle7EpkrLZrvPlUP2Ktm4aE7zBuMDcxjuJlGdmH4`
+Tabs: Medewerkers | Diensten
+
 ## Referenties
 Gebruik `/kalenders` voor de volledige kalenderindeling.
 Gebruik `/scripts` voor Apps Script en OpenAPI schema.
+Specs en beslisdocumenten staan in `.ai/` (use-cases, council-deliberaties, per-feature specs).
