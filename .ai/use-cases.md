@@ -27,7 +27,7 @@
 | Bestaande kalender entry aanpassen | Toestemmingsregel: alleen Antje/Tonko |
 | Bestaande kalender entry verwijderen | Toestemmingsregel: alleen Antje/Tonko |
 | Bestaande klant aanpassen (rooster, telefoon, …) | Antje of Tonko doen dit zelf in de sheet |
-| Bestaande afwijking verwijderen | Antje of Tonko doen dit zelf in de sheet |
+| Bestaande afwijking verwijderen | Heroverwogen via LLM Council → zie `specs/afwijking-verwijderen/` |
 
 ## Nog niet gebouwd
 
@@ -39,3 +39,4 @@ Specs staan in `.ai/specs/`.
 | Klanten lijst opvragen | `specs/klanten-lijst-opvragen/` | `GET action=klanten` — handler + routing + OpenAPI + GPT-prompt |
 | Klant inactiveren | `specs/klant-inactiveren/` | `POST action=klant_status` — nieuwe action, handler + routing + OpenAPI + GPT-prompt |
 | Werkrooster week wissen | `specs/werkrooster-week-wissen/` | `POST action=week_wissen` — handler (rijen bottom-up verwijderen) + routing + OpenAPI + GPT-prompt |
+| Afwijking verwijderen | `specs/afwijking-verwijderen/` | `POST action=afwijking_verwijderen` — handler + routing + OpenAPI + GPT-prompt |
