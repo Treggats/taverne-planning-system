@@ -159,10 +159,12 @@ vóór deactiveren ("Weet je zeker dat je [naam] wil deactiveren?").
 Bij het inplannen van diensten: stel altijd voor uit `GET ?action=medewerkers`
 en filter op `actief: ja`. Inactieve medewerkers nooit suggereren.
 
-## Weekexport
+## Weekplanning
 
-Gebruik dit wanneer Antje vraagt om "de weekplanning", "de export voor week X",
-"maak de planning voor volgende week", of iets vergelijkbaars.
+### Exporteren naar Google Sheets
+
+Gebruik dit wanneer Antje vraagt om "exporteer de weekplanning", "maak de
+planning voor volgende week", "export voor week X", of iets vergelijkbaars.
 
 `POST action=week_export` met `datum` (een dag in de bedoelde week) of `week` (YYYY-WW).
 
@@ -170,6 +172,42 @@ Het systeem kopieert de template, vult alle tabbladen en geeft de URL van de
 nieuwe sheet terug. Stuur die URL naar Antje zodat zij de sheet kan controleren.
 
 Bestaat de export al, dan geeft de API een foutmelding — geen duplicate.
+
+### Weekplanning in chat weergeven
+
+Gebruik dit wanneer Antje vraagt "wat staat er deze week?", "laat de planning
+zien", "wat is het rooster voor volgende week?", of iets vergelijkbaars — zonder
+dat er een sheet aangemaakt hoeft te worden.
+
+Voer de stappen in volgorde uit en presenteer de uitvoer als afzonderlijke
+secties. Gebruik als datum één dag in de bedoelde week.
+
+**Stap 1 – Kalender (`action=week`)**  
+`GET ?action=week&date=<datum>`  
+→ **Planning** — alle kalenderitems per dag, inclusief tijdstip, naam, kalender en locatie.
+
+**Stap 2 – Werkrooster (`action=werkrooster`)**  
+`GET ?action=werkrooster&datum=<datum>`  
+→ **Werkrooster** — tabel met kolommen: Naam | MA | DI | WO | DO | VR | ZA | ZO,
+en per dag de begin- en eindtijd. Lege cellen als de persoon die dag niet werkt.
+
+**Stap 3 – Bezorglijst per dag (`action=bezorgingen`, 6× aanroepen)**  
+`GET ?action=bezorgingen&datum=<datum>` voor maandag t/m zaterdag.
+
+Presenteer twee vormen:
+
+**Bestelling** (weekoverzicht) — één rij per klant, kolommen: Klant nr | Tijd |
+Naam | Adres | Telefoon | Opmerkingen | MA | MA-Toetje | MA-Bezorger | DI | … | ZA-Bezorger.
+Vul "1" in als de klant die dag een bezorging krijgt, anders leeg.
+
+**Per-dag-tabs** (één tabel per dag) — kolommen: Klant nr | Tijd | Naam | Adres |
+Telefoon | Opmerkingen | Toetje | Bezorger. Gesorteerd op tijd.
+
+#### Opmerkingen
+- De API geeft `naam` als één veld terug. Splits zelf naar Voornaam / Achternaam
+  (voornaam = eerste woord, achternaam = de rest).
+- Het type medewerker (vast/stagiair/vrijwilliger) staat niet in de API-uitvoer.
+  Laat die kolom leeg; Antje of Tonko vullen dat handmatig aan.
 
 ## Toon
 
