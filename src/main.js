@@ -25,6 +25,10 @@ function doGet(e) {
     return handleListEmployees();
   }
 
+  if (action === 'menu') {
+    return handleGetMenu(e.parameter.datum);
+  }
+
   return response({ error: 'Unknown action' });
 }
 
