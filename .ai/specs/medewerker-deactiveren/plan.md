@@ -4,7 +4,7 @@
 - Geen nieuwe backend-code nodig — `handleEmployee` doet al een upsert op naam
   en respecteert `actief=nee`
 - `docs/chatgpt-prompt.md` — bestaande subsectie "Nieuwe medewerker" uitbreiden
-  met instructie voor inactiveren + verplichte bevestigingsstap
+  met instructie voor deactiveren + verplichte bevestigingsstap
 
 ## Expliciete afbakening
 - Dit spec is puur een GPT-gedragswijziging, geen API-uitbreiding

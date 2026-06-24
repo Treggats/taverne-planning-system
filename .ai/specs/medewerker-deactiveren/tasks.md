@@ -1,8 +1,8 @@
 # Tasks
 
 - [x] 1. Breid de subsectie "Nieuwe medewerker" in `docs/chatgpt-prompt.md` uit:
-         - Leg uit dat `actief=nee` een medewerker inactiveert
-         - Voeg instructie toe: vraag altijd bevestiging vóór inactiveren
+         - Leg uit dat `actief=nee` een medewerker deactiveert
+         - Voeg instructie toe: vraag altijd bevestiging vóór deactiveren
          - Voeg instructie toe: suggereer alleen actieve medewerkers bij plannen
 - [ ] 2. Smoke test: stuur `POST action=medewerker` met `naam=X, actief=nee` →
          `{ success: true, updated: true }`

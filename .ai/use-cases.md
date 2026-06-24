@@ -18,7 +18,7 @@
 | Week kopiëren | `POST action=week_kopieer` |
 | Nieuwe medewerker toevoegen | `POST action=medewerker` |
 | Medewerkerslijst opvragen | `GET action=medewerkers` |
-| Medewerker inactiveren (GPT-gedrag) | `POST action=medewerker` + `actief=nee`; GPT vraagt bevestiging en filtert inactief |
+| Medewerker deactiveren (GPT-gedrag) | `POST action=medewerker` + `actief=nee`; GPT vraagt bevestiging en filtert inactief |
 
 ## Bewust niet gedekt
 
@@ -37,6 +37,6 @@ Specs staan in `.ai/specs/`.
 |---|---|---|
 | Menu opvragen | `specs/menu-opvragen/` | `GET action=menu&datum=YYYY-MM-DD` — handler + routing + OpenAPI + GPT-prompt |
 | Klanten lijst opvragen | `specs/klanten-lijst-opvragen/` | `GET action=klanten` — handler + routing + OpenAPI + GPT-prompt |
-| Klant inactiveren | `specs/klant-inactiveren/` | `POST action=klant_status` — nieuwe action, handler + routing + OpenAPI + GPT-prompt |
+| Klant deactiveren | `specs/klant-deactiveren/` | `POST action=klant_status` — nieuwe action, handler + routing + OpenAPI + GPT-prompt |
 | Werkrooster week wissen | `specs/werkrooster-week-wissen/` | `POST action=week_wissen` — handler (rijen bottom-up verwijderen) + routing + OpenAPI + GPT-prompt |
 | Afwijking verwijderen | `specs/afwijking-verwijderen/` | `POST action=afwijking_verwijderen` — handler + routing + OpenAPI + GPT-prompt |
