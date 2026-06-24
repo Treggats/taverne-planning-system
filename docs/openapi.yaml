@@ -83,7 +83,7 @@ components:
           default: JOUW_TOKEN
         action:
           type: string
-          enum: [kalender_event, menu, afwijking, afwijking_verwijderen, klant, klant_status, dienst, week_kopieer, week_wissen, medewerker]
+          enum: [kalender_event, menu, afwijking, afwijking_verwijderen, klant, klant_status, dienst, week_kopieer, week_wissen, medewerker, week_export]
           description: >
             kalender_event = nieuw kalender event;
             menu = menu als all-day event;
@@ -94,7 +94,8 @@ components:
             dienst = werkdienst toevoegen/wijzigen/verwijderen;
             week_kopieer = werkrooster van een week kopiëren;
             week_wissen = alle diensten van een week verwijderen (verplicht: week of datum);
-            medewerker = medewerker toevoegen/bijwerken.
+            medewerker = medewerker toevoegen/bijwerken;
+            week_export = weekplanning exporteren naar Google Sheets (verplicht: week of datum).
         kalender:
           type: string
           enum: [taverne, mspa, jules]
