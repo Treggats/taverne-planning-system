@@ -19,6 +19,12 @@
 | Nieuwe medewerker toevoegen | `POST action=medewerker` |
 | Medewerkerslijst opvragen | `GET action=medewerkers` |
 | Medewerker deactiveren (GPT-gedrag) | `POST action=medewerker` + `actief=nee`; GPT vraagt bevestiging en filtert inactief |
+| Menu opvragen | `GET action=menu&datum=YYYY-MM-DD` |
+| Klanten lijst opvragen | `GET action=klanten` |
+| Klant deactiveren | `POST action=klant_status` met `actief=ja/nee` |
+| Werkrooster week wissen | `POST action=week_wissen` |
+| Afwijking verwijderen | `POST action=afwijking_verwijderen` |
+| Weekplanning exporteren naar Google Sheets | `POST action=week_export` met `datum` of `week` |
 
 ## Bewust niet gedekt
 
@@ -27,16 +33,3 @@
 | Bestaande kalender entry aanpassen | Toestemmingsregel: alleen Antje/Tonko |
 | Bestaande kalender entry verwijderen | Toestemmingsregel: alleen Antje/Tonko |
 | Bestaande klant aanpassen (rooster, telefoon, …) | Antje of Tonko doen dit zelf in de sheet |
-| Bestaande afwijking verwijderen | Heroverwogen via LLM Council → zie `specs/afwijking-verwijderen/` |
-
-## Nog niet gebouwd
-
-Specs staan in `.ai/specs/`.
-
-| Use case | Spec | Wat ontbreekt |
-|---|---|---|
-| Menu opvragen | `specs/menu-opvragen/` | `GET action=menu&datum=YYYY-MM-DD` — handler + routing + OpenAPI + GPT-prompt |
-| Klanten lijst opvragen | `specs/klanten-lijst-opvragen/` | `GET action=klanten` — handler + routing + OpenAPI + GPT-prompt |
-| Klant deactiveren | `specs/klant-deactiveren/` | `POST action=klant_status` — nieuwe action, handler + routing + OpenAPI + GPT-prompt |
-| Werkrooster week wissen | `specs/werkrooster-week-wissen/` | `POST action=week_wissen` — handler (rijen bottom-up verwijderen) + routing + OpenAPI + GPT-prompt |
-| Afwijking verwijderen | `specs/afwijking-verwijderen/` | `POST action=afwijking_verwijderen` — handler + routing + OpenAPI + GPT-prompt |
