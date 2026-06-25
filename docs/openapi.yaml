@@ -3,7 +3,7 @@ info:
   title: Antje's Taverne Planning API
   version: 3.0.0
 servers:
-  - url: https://script.google.com/macros/s/AKfycbz81oYzVxPhoWPuHrVbf8gMA7L1eY7cSe3F3hVFB155IYb-SA1XQ1TVfFNVUsBlCdPs8A
+  - url: https://script.google.com/macros/s/AKfycbxshOq-3-R3snW67xl2Bi0ghHw6kOUQGPD8AEPLkB7P7mBLDUrAZYFxM5GUfmJq4l3e
 paths:
   /exec:
     get:
