@@ -4,14 +4,20 @@ Momentopname van de huidige staat. Bijwerken zodra iets concreet verandert
 (deploy, nieuw issue, issue opgelost, kalender/sheet erbij of weg).
 Voor de chronologie zie `CHANGELOG.md`, voor designkeuzes `BESLISSINGEN.md`.
 
-_Laatst bijgewerkt: 2026-06-22_
+_Laatst bijgewerkt: 2026-06-25_
 
 ## Componenten
 
-Draait nu **in productie in Antje's account**: Apps Script-project overgedragen
-aan Antje, deployment draait als Antje (`executeAs`), met toegang tot háár
-kalenders én sheets. Geverifieerd: today/week/werkrooster/bezorgingen + schrijven
-(kalender event, dienst, afwijking) tegen de nieuwe URL.
+Productie draait in Antje's account. Voor de weekexport-feature
+(`DriveApp.makeCopy` + drive-scope) is op 2026-06-25 een **nieuw standalone
+Apps Script-project** aangemaakt (scriptId `1E9jOhp4ay…`, in `.clasp.json`),
+zodat de Drive-autorisatie clean verloopt.
+
+⚠️ **De API is nu niet live.** De nieuwe deployment `AKfycbxshOq…` (in
+`openapi.yaml`) geeft **HTTP 403 — nog niet geautoriseerd**. Eerstvolgende
+actie: script openen → een functie draaien → alle rechten accepteren (incl.
+Drive) → web-app-toegang op "Anyone". De vorige deployment `AKfycbz81oYz…`
+geeft 404 (weg).
 
 ### Google Calendar (Antje's account)
 - `Taverne`, `MSPA`, `Jules Huiskamer` — in Antje's account; script (als Antje)
@@ -19,28 +25,27 @@ kalenders én sheets. Geverifieerd: today/week/werkrooster/bezorgingen + schrijv
 - Tonko's oude test-kalenders mogen opgeruimd worden.
 
 ### Google Apps Script (REST tussenlaag, Antje's account)
-- Code: `src/` (file-per-feature), gepusht met clasp — zie `docs/clasp-deploy.md`.
-  `docs/apps-script-calendar.js` is alleen nog archief.
-- **Productie-project = `1TMjIVKp…`** (eigenaar Antje; Tonko editor). Dit was
-  ooit het per ongeluk door clasp aangemaakte project; Antje heeft dít
-  overgedragen gekregen en gedeployed. `.clasp.json` wijst hier nu naar.
-- **Live** deployment `AKfycbz81oYz…` (door Antje gemaakt → `executeAs = Antje`).
-  Antje heeft opnieuw uitgerold; geverifieerd dat de **actuele code live** is
-  (tijdzone-fix `10:00→10:00`, terugkerende afspraken, Antje's sheet-ID's).
-- Oud testproject `13TY851…` (Tonko) **definitief verwijderd** ✅; de oude
-  endpoint `AKfycbwdRn…` geeft nu HTTP 404. Eén project over: `1TMjIVKp`.
-- OpenAPI schema: `docs/openapi.yaml` (servers.url = de nieuwe `/exec`-URL)
-- Endpoints kalender: `GET ?action=today`, `GET ?action=week&date=...`, `POST` (create)
-- Endpoints bezorgservice: `GET ?action=bezorgingen&datum=...`, `POST action=afwijking`, `POST action=klant`
-- Auth: token in querystring/body (zie `BESLISSINGEN.md`)
+- Code: `src/` (file-per-feature). Volledige actielijst staat in `src/main.js`.
+- **Project: `1E9jOhp4ay…`** (standalone, Antje's account; per `.clasp.json`).
+  Op 2026-06-25 nieuw aangemaakt zodat de drive-scope clean geautoriseerd kan
+  worden (de export gebruikt `DriveApp.makeCopy`). `appsscript.json` bevat de
+  expliciete `oauthScopes` (calendar, spreadsheets, drive, script.external_request).
+- **Deployment `AKfycbxshOq…`** (in `openapi.yaml`) — **nog te autoriseren (403)**.
+- Recent gemergede actions: `GET klanten`, `GET medewerkers`, `GET menu`,
+  `POST klant_status`, `POST afwijking_verwijderen`, `POST week_wissen`,
+  `POST week_export`.
+- OpenAPI schema: `docs/openapi.yaml` (servers.url = de deployment-URL).
+- Auth: token in querystring/body (zie `BESLISSINGEN.md`).
 
 ### Custom GPT
 - Prompt: `docs/chatgpt-prompt.md`
 - Spreekt Apps Script aan via OpenAPI schema (`docs/openapi.yaml`)
-- **In Antje's eigen ChatGPT-account**, gekoppeld aan de productie-URL,
-  end-to-end getest (lezen + schrijven). Setup: `docs/custom-gpt-setup.md`.
-- Token gaat via het schema (`default: JOUW_TOKEN` → vervangen door het echte
-  token); Authentication = None.
+- **In Antje's eigen ChatGPT-account**. Prompt ingekort tot 4592 tekens, met
+  beide weekplanning-scenario's (exporteren + inline weergeven). Setup:
+  `docs/custom-gpt-setup.md`.
+- Let op: de GPT-action wijst naar de nieuwe deployment `AKfycbxshOq…` die nog
+  geautoriseerd moet worden; tot dan krijgt de GPT 403.
+- Token gaat via het schema; Authentication = None.
 
 ### Google Drive
 - Weekplanningen map: `1HNs0w_MOtTSbgI4XekNuZTnoIHvX9sK1` (eigenaar Antje)
@@ -67,6 +72,12 @@ kalenders én sheets. Geverifieerd: today/week/werkrooster/bezorgingen + schrijv
 - Export/print voor in de keuken: nog te doen (aparte vervolgstap).
 
 ## Openstaande punten
+- **Nieuwe deployment `AKfycbxshOq…` autoriseren** (403 → werkend): script openen
+  → functie draaien → alle rechten incl. Drive accepteren → web-app op "Anyone".
+- **Weekexport smoke tests 6–10** draaien (`.ai/specs/weekplanning-exporteren/tasks.md`);
+  daarna die spec-map opruimen.
+- **Weekexport iteratie 2 — Werkrooster-tab** (tasks 11–13): kolomindeling
+  vaststellen + `fillWerkroosterTab` implementeren.
 - Tijdelijke klant-IDs 9001–9006 in bezorgservice-sheet moeten vervangen
   worden door echte nummers (input via Antje).
 - Bezorgservice rooster onbekend voor 182 Marrie, 224 Grietje V., 242 Geertje,
@@ -75,7 +86,8 @@ kalenders én sheets. Geverifieerd: today/week/werkrooster/bezorgingen + schrijv
   via `Afwijkingen` opgelost door elke oneven week een annulering te zetten.
   Bij meer klanten met dit ritme: frequentie-veld toevoegen.
 - Eerste foutieve nieuwe sheet `Bezorgservice (nieuw)` (`1nPLI…`) moet weg.
-- Werkrooster: wekelijkse print/export voor in de keuken nog bouwen.
+- Weekexport (keuken-print): basis gebouwd (Planning + Bestelling + dag-tabs via
+  template-kopie). Werkrooster-tab volgt in iteratie 2.
 
 ## Productie-migratie naar Antje's account
 
@@ -83,10 +95,13 @@ kalenders én sheets. Geverifieerd: today/week/werkrooster/bezorgingen + schrijv
 Antje ✅, GPT in Antje's ChatGPT ✅. Kanttekening: productie bleek in project
 `1TMjIVKp` te draaien met verouderde code (zie boven).
 
-**Migratie afgerond ✅** — alles draait in productie in Antje's account:
-- Redeploy productie ✅ (actuele code geverifieerd live).
-- Oud testproject `13TY851` + endpoint `AKfycbwdRn…` definitief verwijderd ✅
-  (endpoint geeft 404). Test-kalenders + testdata al weg ✅.
+**Migratie grotendeels afgerond** — alles draait in Antje's account.
+- ⚠️ Update 2026-06-25: voor de weekexport is een **nieuw standalone project**
+  (`1E9jOhp4ay…`) aangemaakt; de bijbehorende deployment `AKfycbxshOq…` moet nog
+  geautoriseerd worden (zie "Componenten" + "Openstaande punten"). Tot dan is de
+  API niet live. De eerdere deployment `AKfycbz81oYz…` geeft 404.
+- _Onderstaande migratiestappen zijn historisch en deels achterhaald door de
+  overstap naar het standalone project; bewaard als referentie._
 
 Aandachtspunt voor beheer: Tonko blijft editor op het productie-project
 (`1TMjIVKp`) voor clasp-deploys.

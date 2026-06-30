@@ -5,6 +5,13 @@ Eén regel per wijziging, formaat: `- YYYY-MM-DD — wat er veranderd is (welk b
 Aan het eind van een werksessie waarin iets is gewijzigd toevoegen.
 Voor de huidige staat zie `STATUS.md`, voor "waarom" `BESLISSINGEN.md`.
 
+## 2026-06-24 / 25 — weekexport + nieuw standalone project
+- Nieuwe features gemerged op `main`: `klanten` (lijst opvragen), `medewerkers` (lijst), `menu` opvragen, `klant_status` (de)activeren, `afwijking_verwijderen`, `week_wissen` (werkrooster-week leegmaken).
+- **Weekexport** (`src/export.js`): `POST action=week_export` kopieert het template naar de Weekplanningen-map en vult Planning + Bestelling + dag-tabs (`handleWeekExport`, `weekDates`, `fillGegevensTab`, `fillPlanningTab`, `fillBestellingTab`, `fillDagTab`). `EXPORT_TEMPLATE_ID` + `WEEKPLANNINGEN_FOLDER_ID` in `src/config.js`. Spec in `.ai/specs/weekplanning-exporteren/`. Tasks 1–5 ✅; smoke tests 6–10 nog open; Werkrooster-tab is iteratie 2.
+- `appsscript.json`: expliciete `oauthScopes` (calendar, spreadsheets, drive, script.external_request) — `DriveApp.makeCopy` voor de export vereist de drive-scope.
+- **Nieuw standalone Apps Script-project** (`1E9jOhp4ay…`) aangemaakt omdat het bestaande project de drive-scope niet clean geautoriseerd kreeg. `docs/openapi.yaml` server-url naar de nieuwe deployment `AKfycbxshOq…`. Die deployment moet nog geautoriseerd worden (geeft nu 403); vorige deployment `AKfycbz81oYz…` geeft 404.
+- `docs/chatgpt-prompt.md` verkort tot 4592 tekens (limiet 8000), beide weekplanning-scenario's behouden. Trigger-voorbeelden in de OpenAPI action-beschrijvingen.
+
 ## 2026-06-22 (branch docs/productie-afgerond)
 - Productie-migratie grotendeels afgerond: Custom GPT in Antje's eigen ChatGPT, gekoppeld aan de productie-URL.
 - **Correctie na diagnose**: productie bleek te draaien in project `1TMjIVKp` (het ooit per ongeluk aangemaakte project, door Antje overgedragen+gedeployed), terwijl clasp naar het oude `13TY851` wees. Productie draaide daardoor verouderde code (tijdzone-test 10:00→18:00) en mogelijk oude sheet-ID's. `.clasp.json` omgezet naar `1TMjIVKp`; actuele code naar HEAD gepusht; Antje moet de deployment opnieuw uitrollen (executeAs=Antje) om het live te krijgen. `13TY851` (met levende deployment `AKfycbwdRn…`) is verweesd en mag weg. `STATUS.md` bijgewerkt.
